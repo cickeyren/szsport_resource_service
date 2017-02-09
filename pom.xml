@@ -4,12 +4,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.digitalchina</groupId>
-    <artifactId>szsport_order_service</artifactId>
+    <artifactId>szsport_resource_service</artifactId>
     <version>1.0.0</version>
     <packaging>war</packaging>
 
-    <name>szsport_order_service</name>
-    <description>szsport_order_service</description>
+    <name>szsport_resource_service</name>
+    <description>szsport_resource_service</description>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
