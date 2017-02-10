@@ -5,5 +5,35 @@
     <select id="getAllSpecialStadium" resultType="java.util.HashMap">
          SELECT m.id,name,address,lng,lat,s.pic_address FROM main_stadium m LEFT JOIN stadium_pic s ON m.id=s.stadium_id WHERE m.is_special='1' AND s.is_first='1'
     </select>
-
+    <!-- 查询所有场馆列表且根据用户当前距离排序 -->
+    <select id="findAllStadiumList" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+        SELECT
+          A.name,
+          A.address,
+          B.distance
+        FROM (SELECT A.*,
+        ROUND(6378.138*2*asin(sqrt(pow(sin( (lat*pi()/180-${clientLat}*pi()/180)/2),2)+cos(lat*pi()/180)*cos(${clientLat}*pi()/180)* pow(sin( (lng*pi()/180-${clientLng}*pi()/180)/2),2)))*1000) + "" AS distance
+        FROM (SELECT
+          ms.name,
+          ms.address
+        FROM
+        `main_stadium ms`
+        WHERE
+        <![CDATA[CAST(Lon AS DECIMAL(19, 12)) < ${maxLng}
+		AND CAST(Lon AS DECIMAL(19, 12)) > ${minLng}
+		AND CAST(Lat AS DECIMAL(19, 12)) < ${maxLat}
+		AND CAST(Lat AS DECIMAL(19, 12)) > ${minLat}]]>
+        ) A
+        ORDER BY distance ASC) B
+    </select>
+    <!-- 根据ID查询会馆详情 -->
+    <select id="findStadiumDetailById" parameterType="java.lang.String" resultType="com.digitalchina.sport.order.api.model.MainStadium">
+        SELECT
+          ms.id,
+          ms.name,
+          ms.provincialLevel,
+          ms.cityLevel,
+          ms.
+        FROM main_stadium ms WHERE ms.id = #{Id}
+    </select>
 </mapper>
