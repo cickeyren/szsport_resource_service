@@ -24,5 +24,13 @@ public class StadiumService {
     public List<Map<Object,Object>> getAllSpecialStadium(){
         return stadiumDao.getAllSpecialStadium();
     }
-    
+
+    /**
+     * 获取场馆列表
+     * @return
+     */
+    public List getAllStadiumList(Map map){
+        return stadiumDao.findAllStadiumList(map);
+    }
+
 }

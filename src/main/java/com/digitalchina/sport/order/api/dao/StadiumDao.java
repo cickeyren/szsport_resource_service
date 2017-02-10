@@ -20,4 +20,10 @@ public interface StadiumDao {
     List<Map<Object,Object>> getAllSpecialStadium();
 
 
+    /**
+     * 获取所有场馆列表
+     * @return
+     */
+    List findAllStadiumList(Map map);
+
 }
