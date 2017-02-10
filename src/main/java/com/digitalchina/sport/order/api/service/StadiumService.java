@@ -2,6 +2,7 @@ package com.digitalchina.sport.order.api.service;
 
 
 import com.digitalchina.sport.order.api.dao.StadiumDao;
+import com.digitalchina.sport.order.api.model.MainStadium;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,4 +34,11 @@ public class StadiumService {
         return stadiumDao.findAllStadiumList(map);
     }
 
+    /**
+     * 根据ID获取场馆详
+     * @return
+     */
+    public MainStadium getStadiumDetailById(String Id){
+        return stadiumDao.findStadiumDetailById(Id);
+    }
 }

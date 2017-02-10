@@ -3,6 +3,8 @@ package com.digitalchina.sport.order.api.dao;
 
 
 import com.digitalchina.sport.order.api.model.Field;
+import com.digitalchina.sport.order.api.model.MainStadium;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -25,5 +27,10 @@ public interface StadiumDao {
      * @return
      */
     List findAllStadiumList(Map map);
+
+    /*
+     * 根据ID查询会馆详情
+     */
+    MainStadium findStadiumDetailById(String Id);
 
 }

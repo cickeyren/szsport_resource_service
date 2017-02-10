@@ -70,7 +70,7 @@ public class StadiumController {
 
 
     /*
-     * 根据类型获取到主场馆
+     *
      */
 
 }
