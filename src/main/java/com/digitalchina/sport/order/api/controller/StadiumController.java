@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
-
+ * 场馆control
  */
 @RestController
 @RequestMapping("/api/stadium/")
@@ -21,6 +21,10 @@ public class StadiumController {
     @Autowired
     private StadiumService stadiumService;
 
+    /**
+     * 获取所有精选场馆
+     * @return
+     */
     @RequestMapping(value="getAllSpecialStadium",method = RequestMethod.GET)
     @ResponseBody
     public String getAllSpecialStadium() {

@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
-
+ * 场地control
  */
 @RestController
 @RequestMapping("/api/field/")
@@ -22,9 +22,13 @@ public class FieldController {
     @Autowired
     private FieldService fieldService;
 
+    /**
+     * 获取所有场地
+     * @return
+     */
     @RequestMapping(value="findAllField",method = RequestMethod.GET)
     @ResponseBody
-    public String findAllField(@RequestParam(required = false) String serviceId) {
+    public String findAllField() {
         List<Field> list = fieldService.findAll();
         Map<String,Object> reqMap=new HashMap<String, Object>();
         reqMap.put("list",list);
