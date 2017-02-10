@@ -54,7 +54,7 @@ public class StadiumController {
         Map paramMap = DistanceUtils.returnLLSquarePoint(Double.parseDouble(clientLng),Double.parseDouble(clientLat),Double.parseDouble(config.pageSize));
         paramMap.put("clientLng",clientLng);
         paramMap.put("clientLat",clientLat);
-        if (pageSize.isEmpty()){
+        if (pageSize==null || "".equals(pageSize)){
             paramMap.put("pageSize",config.pageSize);
         }else {
             paramMap.put("pageSize",pageSize);
@@ -67,10 +67,27 @@ public class StadiumController {
 
     }
 
-
-
-    /*
-     * 根据类型获取到主场馆
+    /**
+     * 根据子场馆ID获得子场馆和所属父场馆详情
+     * 主场馆的图片展示
+     * @param statudiumId
+     * @return
      */
+    @RequestMapping(value="getStadiumDetail",method = RequestMethod.GET)
+    @ResponseBody
+    public String getStadiumDetail(@RequestParam(value = "statudiumId", required = false) String statudiumId){
+        Map<String,Object> reqMap=new HashMap<String, Object>();//返回的map
+
+        Map<String,String> stadiumDetail = stadiumService.getStadiumDetail(statudiumId);
+        String mianStadiumId = stadiumDetail.get("pid");//获取该子场馆的主场馆ID
+        if(mianStadiumId!=null && !"".equals(mianStadiumId)){
+            List<Map<Object,Object>> picList = stadiumService.getAllPictureByStadiumId(mianStadiumId);
+            reqMap.put("picList",picList);
+        }
+
+        reqMap.put("stadiumDetail",stadiumDetail);
+        return Result.ok(reqMap);
+    }
+
 
 }

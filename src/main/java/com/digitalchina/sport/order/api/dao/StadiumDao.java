@@ -26,4 +26,17 @@ public interface StadiumDao {
      */
     List findAllStadiumList(Map map);
 
+    /**
+     * 根据子场馆ID获得子场馆和所属父场馆详情
+     * @param stadiumId
+     * @return
+     */
+    Map<String,String> getStadiumDetail(String stadiumId);
+
+    /**
+     * 根据场馆ID获取场馆图片列表
+     * @param stadiumId
+     * @return
+     */
+    List<Map<Object,Object>> getAllPictureByStadiumId(String stadiumId);
 }

@@ -33,4 +33,21 @@ public class StadiumService {
         return stadiumDao.findAllStadiumList(map);
     }
 
+    /**
+     * 根据子场馆ID获得子场馆和所属父场馆详情
+     * @param stadiumId
+     * @return
+     */
+    public Map<String,String> getStadiumDetail(String stadiumId){
+        return stadiumDao.getStadiumDetail(stadiumId);
+    }
+
+    /**
+     * 根据场馆ID获取场馆图片列表
+     * @param stadiumId
+     * @return
+     */
+    public List<Map<Object,Object>> getAllPictureByStadiumId(String stadiumId){
+        return stadiumDao.getAllPictureByStadiumId(stadiumId);
+    }
 }

@@ -36,4 +36,32 @@
           ms.
         FROM main_stadium ms WHERE ms.id = #{Id}
     </select>
+
+    <!-- 根据子场馆ID获得子场馆和所属父场馆详情 -->
+    <select id="getStadiumDetail" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+        SELECT
+            m.`name` AS mname,
+            m.address,
+            m.telephone,
+            m.`status` AS mstatus,
+            s.classify,
+            s.id AS sid,
+            s.parent_id as pid,
+            s.`name` AS sname,
+            s.`status` AS sstatus
+        FROM
+            sub_stadium s
+        LEFT JOIN main_stadium m ON s.parent_id = m.id
+        WHERE
+            s.id = #{stadiumId}
+    </select>
+    <!-- 根据场馆ID获取场馆图片列表 -->
+    <select id="getAllPictureByStadiumId" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+    SELECT
+        pic.id,pic.pic_address,pic.is_first,pic.stadium_id,pic.create_time
+    FROM
+        stadium_pic pic
+    WHERE
+        pic.stadium_id = #{stadiumId}
+    </select>
 </mapper>
