@@ -6,11 +6,14 @@ package com.digitalchina.sport.order.api.model;
 public class Field {
 
     private String id;
-    private String field_name;
-    private String display_name;
+    private String fieldName;
+    private String displayName;
+    /**
+     * 场地状态(1正常，0闭馆，2作废)
+     */
     private String status;
     private String introduction;
-    private String stadium_id;
+    private String stadiumId;
 
     public String getId() {
         return id;
@@ -20,20 +23,20 @@ public class Field {
         this.id = id;
     }
 
-    public String getField_name() {
-        return field_name;
+    public String getFieldName() {
+        return fieldName;
     }
 
-    public void setField_name(String field_name) {
-        this.field_name = field_name;
+    public void setFieldName(String fieldName) {
+        this.fieldName = fieldName;
     }
 
-    public String getDisplay_name() {
-        return display_name;
+    public String getDisplayName() {
+        return displayName;
     }
 
-    public void setDisplay_name(String display_name) {
-        this.display_name = display_name;
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
     }
 
     public String getStatus() {
@@ -52,11 +55,11 @@ public class Field {
         this.introduction = introduction;
     }
 
-    public String getStadium_id() {
-        return stadium_id;
+    public String getStadiumId() {
+        return stadiumId;
     }
 
-    public void setStadium_id(String stadium_id) {
-        this.stadium_id = stadium_id;
+    public void setStadiumId(String stadiumId) {
+        this.stadiumId = stadiumId;
     }
 }

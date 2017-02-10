@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.digitalchina.sport.order.api.dao.StadiumDao" >
+    <!-- 获取精选主场馆 -->
+    <select id="getAllSpecialStadium" resultType="java.util.HashMap">
+         SELECT m.id,name,address,lng,lat,s.pic_address FROM main_stadium m LEFT JOIN stadium_pic s ON m.id=s.stadium_id WHERE m.is_special='1' AND s.is_first='1'
+    </select>
+
+</mapper>

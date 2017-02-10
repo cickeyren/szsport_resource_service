@@ -1,8 +1,7 @@
 package com.digitalchina.sport.order.api.controller;
 
 import com.digitalchina.common.result.Result;
-import com.digitalchina.sport.order.api.model.Field;
-import com.digitalchina.sport.order.api.service.FieldService;
+import com.digitalchina.sport.order.api.service.StadiumService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,20 +13,20 @@ import java.util.Map;
 
  */
 @RestController
-@RequestMapping("/api/field/")
-public class FieldController {
+@RequestMapping("/api/stadium/")
+public class StadiumController {
 
     //public static final Logger logger = LoggerFactory.getLogger(FieldController.class);
 
     @Autowired
-    private FieldService fieldService;
+    private StadiumService stadiumService;
 
-    @RequestMapping(value="findAllField",method = RequestMethod.GET)
+    @RequestMapping(value="getAllSpecialStadium",method = RequestMethod.GET)
     @ResponseBody
-    public String findAllField(@RequestParam(required = false) String serviceId) {
-        List<Field> list = fieldService.findAll();
+    public String getAllSpecialStadium() {
+        List<Map<Object,Object>> mapList = stadiumService.getAllSpecialStadium();
         Map<String,Object> reqMap=new HashMap<String, Object>();
-        reqMap.put("list",list);
+        reqMap.put("list",mapList);
         return Result.ok(reqMap);
     }
 }
