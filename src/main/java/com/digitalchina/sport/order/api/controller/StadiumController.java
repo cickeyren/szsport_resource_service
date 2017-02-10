@@ -44,10 +44,19 @@ public class StadiumController {
     @RequestMapping(value = "getAllStadiumList.do", method = RequestMethod.GET)
     @ResponseBody
     //用户传递来的经纬度
-    public String getAllStadiumList(@RequestParam(required = true) String clientLng ,@RequestParam(required = true) String clientLat){
+    public String getAllStadiumList(@RequestParam(value = "pageIndex",defaultValue = "0", required = false) String pageIndex,
+                                    @RequestParam(value = "pageSize", required = false) String pageSize,
+                                    @RequestParam(value = "clientLng", required = false) String clientLng,
+                                    @RequestParam(value = "clientLat", required = false) String clientLat){
         Map paramMap = DistanceUtils.returnLLSquarePoint(Double.parseDouble(clientLng),Double.parseDouble(clientLat),Double.parseDouble(Config.defaultDistance));
         paramMap.put("clientLng",clientLng);
         paramMap.put("clientLat",clientLat);
+        if (pageSize.isEmpty()){
+            paramMap.put("pageSize",Config.pageSize);
+        }else {
+            paramMap.put("pageSize",pageSize);
+        }
+        paramMap.put("pageIndex",pageIndex);
         List stadiumList = stadiumService.getAllStadiumList(paramMap);
         Map<String,Object> reqMap=new HashMap<String, Object>();
         reqMap.put("stadiumList",stadiumList);

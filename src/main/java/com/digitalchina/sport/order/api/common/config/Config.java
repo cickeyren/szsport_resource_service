@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class Config {
     @Value("${sport.order.pagesize}")
-    public String pageSize;
+    public static String pageSize;
     @Value("${sport.default.distance}")
     public static String defaultDistance;
 
