@@ -1,8 +1,6 @@
 package com.digitalchina.sport.order.api.dao;
 
 
-
-import com.digitalchina.sport.order.api.model.Field;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -17,7 +15,7 @@ public interface StadiumDao {
      * 获取精选主场馆
      * @return
      */
-    List<Map<Object,Object>> getAllSpecialStadium();
+    List<Map<Object,Object>> getAllSpecialStadium(Map map);
 
 
     /**
@@ -39,4 +37,18 @@ public interface StadiumDao {
      * @return
      */
     List<Map<Object,Object>> getAllPictureByStadiumId(String stadiumId);
+    /*
+     * 根据classify查询子场馆列表
+     */
+    List findSubStadiumListByClassify(Map map);
+
+    //根据主场馆ID获取主场馆详情
+    Map findMainStadiumById(String mainStadiumId);
+
+    /**
+     * 根据场馆ID获取图片列表
+     * @return
+     */
+    List findPicList(String mainStadiumId);
+
 }

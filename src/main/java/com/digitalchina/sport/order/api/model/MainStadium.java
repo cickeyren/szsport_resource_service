@@ -28,7 +28,6 @@ public class MainStadium {
      * 下线状态，前台不可见；闭馆状态前台显示【不可订】默认下线状态
      */
     private String status;
-    private String merchantId;
     private String classify;
     /**
      * 是否精选0：非精选1:精选
@@ -137,14 +136,6 @@ public class MainStadium {
 
     public void setStatus(String status) {
         this.status = status;
-    }
-
-    public String getMerchantId() {
-        return merchantId;
-    }
-
-    public void setMerchantId(String merchantId) {
-        this.merchantId = merchantId;
     }
 
     public String getClassify() {
