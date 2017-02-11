@@ -3,7 +3,7 @@ package com.digitalchina.sport.order.api.controller;
 import com.digitalchina.sport.order.api.common.config.Config;
 import com.digitalchina.common.result.Result;
 import com.digitalchina.common.utils.DistanceUtils;
-import com.digitalchina.sport.order.api.model.MainStadium;
+
 import com.digitalchina.sport.order.api.service.StadiumService;
 import com.mysql.jdbc.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -144,8 +144,6 @@ public class StadiumController {
         //根据主场馆ID获取图片的list
         List picList = stadiumService.getPicList(mainStadiumId);
         Map<String,Object> resultMap = new HashMap<String,Object>();
-        resultMap.put("stadiumDetail",stadiumDetail);
-        resultMap.put("picList",picList);
         return Result.ok(resultMap);
     }
 }

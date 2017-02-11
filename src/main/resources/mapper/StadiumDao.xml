@@ -47,7 +47,7 @@
 		AND CAST(lat AS DECIMAL(19, 12)) > ${minLat}]]>
         ) A
         ORDER BY distance ASC) B
-        LIMIT 0,${pageSize}
+        LIMIT ${pageIndex},${pageSize}
     </select>
     <select id="findSubStadiumListByClassify" parameterType="java.util.Map" resultType="java.util.HashMap">
         SELECT
@@ -77,7 +77,7 @@
 		AND CAST(lat AS DECIMAL(19, 12)) > ${minLat}]]>
         ) A
         ORDER BY distance ASC) B
-        LIMIT 0,${pageSize}
+        LIMIT ${pageIndex},${pageSize}
     </select>
 
     <!-- 根据子场馆ID获得子场馆和所属父场馆详情 -->
