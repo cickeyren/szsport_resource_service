@@ -55,7 +55,7 @@ public class Result {
     }
 
     public static String ok(Object result) {
-        return (new Result(0, Result.Status.OK.name(), (String)null, result)).toString();
+        return (new Result(0, Result.Status.OK.name(), "success", result)).toString();
     }
 
     public String getStatus() {
