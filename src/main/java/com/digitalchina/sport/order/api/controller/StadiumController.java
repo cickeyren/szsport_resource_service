@@ -32,7 +32,7 @@ public class StadiumController {
      * 获取所有精选场馆
      * @return
      */
-    @RequestMapping(value="getAllSpecialStadium",method = RequestMethod.GET)
+    @RequestMapping(value="getAllSpecialStadium.json",method = RequestMethod.GET)
     @ResponseBody
     public String getAllSpecialStadium( @RequestParam(value = "clientLng", required = true) String clientLng,
                                         @RequestParam(value = "clientLat", required = true) String clientLat) {
@@ -50,7 +50,7 @@ public class StadiumController {
      * 获取所有场馆列表(根据用户当前经纬排序)
      * @return
      */
-    @RequestMapping(value = "getAllStadiumList", method = RequestMethod.GET)
+    @RequestMapping(value = "getAllStadiumList.json", method = RequestMethod.GET)
     @ResponseBody
     //用户传递来的经纬度
     public String getAllStadiumList(@RequestParam(value = "pageIndex",defaultValue = "0", required = false) String pageIndex,
@@ -81,7 +81,7 @@ public class StadiumController {
      * @param statudiumId
      * @return
      */
-    @RequestMapping(value="getStadiumDetail",method = RequestMethod.GET)
+    @RequestMapping(value="getStadiumDetail.json",method = RequestMethod.GET)
     @ResponseBody
     public String getStadiumDetail(@RequestParam(value = "statudiumId", required = false) String statudiumId){
         Map<String,Object> reqMap=new HashMap<String, Object>();//返回的map
@@ -102,7 +102,7 @@ public class StadiumController {
      * @RequestParam 用户经纬度，选中的分类，pageIndex，pageSize
      * @return
      */
-    @RequestMapping(value = "getSubStadiumListByClassify", method = RequestMethod.GET)
+    @RequestMapping(value = "getSubStadiumListByClassify.json", method = RequestMethod.GET)
     @ResponseBody
     public String getSubStadiumListByClassify(@RequestParam(value = "pageIndex",defaultValue = "0",required = false) String pageIndex,
                                               @RequestParam(value = "pageSize", required = false) String pageSize,
@@ -136,7 +136,7 @@ public class StadiumController {
      * @RequestParam 主场馆
      * @return
      */
-    @RequestMapping(value = "getMainStadiumDetailById", method = RequestMethod.GET)
+    @RequestMapping(value = "getMainStadiumDetailById.json", method = RequestMethod.GET)
     @ResponseBody
     public String getMainStadiumDetailById(@RequestParam(value = "mainStadiumId", required = true) String mainStadiumId){
         //根据主场馆的ID获取主场馆详情
@@ -144,6 +144,51 @@ public class StadiumController {
         //根据主场馆ID获取图片的list
         List picList = stadiumService.getPicList(mainStadiumId);
         Map<String,Object> resultMap = new HashMap<String,Object>();
+        resultMap.put("stadiumDetail",stadiumDetail);
+        resultMap.put("picList",picList);
         return Result.ok(resultMap);
+    }
+
+    /*
+     * 获取所有合作商列表
+     * @return
+     */
+    @RequestMapping(value = "getAllMerchant.json",method = RequestMethod.GET)
+    @ResponseBody
+    public String getAllerchant(){
+        //获取所有合作商列表
+        List getAllMerchantList = stadiumService.getAllMerchantList();
+        Map<String,Object> resultMap = new HashMap<String,Object>();
+
+        resultMap.put("getAllMerchantList",getAllMerchantList);
+        return Result.ok(resultMap);
+    }
+
+    /*
+     * 获取所有主场馆列表
+     * @return
+     */
+    @RequestMapping(value = "getAllMainStadium.json",method = RequestMethod.GET)
+    @ResponseBody
+    public String getAllMainStadium(){
+        //获取所有主场馆列表
+        List getAllMainStadiumList = stadiumService.getAllMainStadiumList();
+        Map<String,Object> resultMap = new HashMap<String,Object>();
+
+        resultMap.put("getAllMainStadiumList",getAllMainStadiumList);
+        return Result.ok(resultMap);
+    }
+
+    /**
+     * 根据主场馆ID获取子场馆列表
+     * @return
+     */
+    @RequestMapping(value = "getSubStadiumByMainId.json",method = RequestMethod.GET)
+    @ResponseBody
+    public String getSubStadiumListByMainId(@RequestParam(value = "mainStadiumId",required = true)String mainStadiumId){
+
+        List subStadiumList = stadiumService.getSubStadiumListByMainId(mainStadiumId);
+
+        return Result.ok(subStadiumList);
     }
 }

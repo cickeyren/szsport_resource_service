@@ -26,7 +26,7 @@ public class FieldController {
      * 获取所有场地
      * @return
      */
-    @RequestMapping(value="findAllField",method = RequestMethod.GET)
+    @RequestMapping(value="findAllField.json",method = RequestMethod.GET)
     @ResponseBody
     public String findAllField() {
         List<Field> list = fieldService.findAll();

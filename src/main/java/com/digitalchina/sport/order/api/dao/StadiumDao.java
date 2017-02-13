@@ -51,4 +51,20 @@ public interface StadiumDao {
      */
     List findPicList(String mainStadiumId);
 
+    /**
+     * 查询所有主场馆列表
+     */
+    List findAllMerchantList();
+
+    /**
+     * 查询所有场馆列表
+     */
+    List findAllMainStadiumList();
+
+    /**
+     * 根据主场馆ID获取子场馆列表
+     * @return
+     */
+    List findSubStadiumListByMainId(String mainStadiumId);
+
 }

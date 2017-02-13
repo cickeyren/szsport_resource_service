@@ -73,4 +73,28 @@ public class StadiumService {
     public List getPicList(String mainStadiumId){
         return stadiumDao.findPicList(mainStadiumId);
     }
+
+    /**
+     * 获取所有合作商列表
+     * @return
+     */
+    public List getAllMerchantList(){
+        return stadiumDao.findAllMerchantList();
+    }
+
+    /**
+     * 获取所有主场馆列表(无参)
+     * @return
+     */
+    public List getAllMainStadiumList(){
+        return stadiumDao.findAllMainStadiumList();
+    }
+
+    /**
+     * 根据主场馆ID获取子场馆列表
+     * @return
+     */
+    public List getSubStadiumListByMainId(String mainStadiumId){
+        return stadiumDao.findSubStadiumListByMainId(mainStadiumId);
+    }
 }

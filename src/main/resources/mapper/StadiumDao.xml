@@ -132,4 +132,61 @@
         WHERE
           stadium_pic.stadium_id = #{mainStadiumId}
     </select>
+    <!--查询所有主场管列表 -->
+    <select id="findAllMerchantList" resultType="java.util.HashMap">
+        SELECT
+            id,
+            merchant_name,
+            address,
+            contacts,
+            telephone,
+            cooperation_way,
+            pay_way,
+            pay_way_account,
+            pay_way_key,
+            settlement_way,
+            status,
+            remark
+        FROM
+            merchant
+    </select>
+    <!-- 查询所有主场馆列表-->
+    <select id="findAllMainStadiumList" resultType="java.util.HashMap">
+         SELECT
+            id,
+            name,
+            address,
+            open_time,
+            telephone,
+            introduction,
+            lng,
+            lat,
+            status,
+            classify,
+            is_special,
+            create_time
+        FROM
+            main_stadium
+    </select>
+    <!--根据主场馆ID查询子场馆列表 -->
+    <select id="findSubStadiumListByMainId" parameterType="java.lang.String" resultType="java.util.HashMap">
+        SELECT
+            ss.id,
+            ss.name,
+            ss.classify,
+            ss.introduction,
+            ss.status,
+            ss.create_time,
+            ms.address,
+            ms.create_time,
+            ms.classify,
+            ms.id,
+            ms.introduction,
+            ms.name
+        FROM
+	        sub_stadium ss
+        LEFT JOIN main_stadium ms ON ms.id = ss.parent_id
+        WHERE
+	        ms.id = #{mainStadiumId}
+    </select>
 </mapper>

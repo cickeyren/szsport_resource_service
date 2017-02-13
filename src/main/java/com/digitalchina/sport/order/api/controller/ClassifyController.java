@@ -26,7 +26,7 @@ public class ClassifyController {
      * 获取cid
      * @return
      */
-    @RequestMapping(value="getCid",method = RequestMethod.GET)
+    @RequestMapping(value="getCid.json",method = RequestMethod.GET)
     @ResponseBody
     public String getCid(@RequestParam(required = false) int pid) {
         Map<String,Object> reqMap=new HashMap<String, Object>();
