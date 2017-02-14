@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.digitalchina.sport.order.api.dao.FieldDao" >
+<mapper namespace="com.digitalchina.sport.resource.api.dao.FieldDao" >
     <select id="findAll" parameterType="java.util.HashMap" resultType="Field">
         select field_name AS fieldName,display_name AS displayName FROM field
     </select>

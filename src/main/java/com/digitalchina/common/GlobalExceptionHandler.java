@@ -1,6 +1,6 @@
 package com.digitalchina.common;
 
-import com.digitalchina.sport.order.api.common.exception.BusinessException;
+import com.digitalchina.sport.resource.api.common.exception.BusinessException;
 import org.apache.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,7 +1,7 @@
 package com.digitalchina.common;
 
 
-import com.digitalchina.sport.order.api.common.Constants;
+import com.digitalchina.sport.resource.api.common.Constants;
 
 public class RtnData<T> {
 

@@ -27,12 +27,11 @@
 
     <typeAliases>
         <!--实体类-->
-        <package name="com.digitalchina.sport.order.api.model"/>
+        <package name="com.digitalchina.sport.resource.api.model"/>
     </typeAliases>
 
     <mappers>
         <!--mapper文件配置-->
         <!--<mapper resource="mapper/ApiOrderDao.xml"/>-->
-        <!--<mapper resource="mapper/FieldDao.xml"/>-->
     </mappers>
 </configuration>

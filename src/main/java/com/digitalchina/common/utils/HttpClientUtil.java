@@ -1,7 +1,7 @@
 package com.digitalchina.common.utils;
 
 import com.digitalchina.common.ServiceRuntimeException;
-import com.digitalchina.sport.order.api.common.Constants;
+import com.digitalchina.sport.resource.api.common.Constants;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.ClientProtocolException;

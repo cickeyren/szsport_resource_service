@@ -70,7 +70,16 @@ public class UtilDate {
 		int count = rad.nextInt(900)+100;
 		return count + "";
 	}
-	
+
+	/**
+	 * 产生随机的6位数
+	 * @return
+	 */
+	public static String getSix(){
+		Random rad=new Random();
+		int count = rad.nextInt(900000)+100000;
+		return count + "";
+	}
 	/**
 	 * 比较传入的时间加上3个月后，是否超出当前时间
 	 * @param datetime
