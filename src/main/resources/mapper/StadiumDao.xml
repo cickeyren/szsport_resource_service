@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.digitalchina.sport.resource.api.dao.StadiumDao" >
+    <!-- 获取精选主场馆 -->
+    <select id="getAllSpecialStadium" parameterType="java.util.Map" resultType="java.util.HashMap">
+         SELECT
+           *
+         FROM (SELECT A.*,
+         ROUND(6378.138*2*asin(sqrt(pow(sin( (lat*pi()/180-${clientLat}*pi()/180)/2),2)+cos(lat*pi()/180)*cos(${clientLat}*pi()/180)* pow(sin( (lng*pi()/180-${clientLng}*pi()/180)/2),2)))*1000) + "" AS distance
+         FROM (SELECT
+            m.id,
+            m.name,
+            m.address,
+            m.lng,
+            m.lat,
+            s.pic_address,
+            m.status
+         FROM
+            main_stadium m
+         LEFT JOIN stadium_pic s ON m.id=s.stadium_id
+         WHERE m.is_special='1'
+         AND s.is_first='1') A
+         ORDER BY distance ASC )B
+    </select>
+    <!-- 查询所有场馆列表且根据用户当前距离排序 -->
+    <select id="findAllStadiumList" parameterType="java.util.Map" resultType="java.util.HashMap">
+        SELECT
+          *
+        FROM (SELECT A.*,
+        ROUND(6378.138*2*asin(sqrt(pow(sin( (lat*pi()/180-${clientLat}*pi()/180)/2),2)+cos(lat*pi()/180)*cos(${clientLat}*pi()/180)* pow(sin( (lng*pi()/180-${clientLng}*pi()/180)/2),2)))*1000) + "" AS distance
+        FROM (SELECT
+          ms.id,
+          ms.name,
+          ms.address,
+          s.pic_address,
+          ms.lng,
+          ms.lat
+        FROM
+          main_stadium ms
+        LEFT JOIN
+          stadium_pic s ON ms.id = s.stadium_id
+        WHERE
+          s.is_first = '1'
+        <![CDATA[AND CAST(lng AS DECIMAL(19, 12)) < ${maxLng}
+		AND CAST(lng AS DECIMAL(19, 12)) > ${minLng}
+		AND CAST(lat AS DECIMAL(19, 12)) < ${maxLat}
+		AND CAST(lat AS DECIMAL(19, 12)) > ${minLat}]]>
+        ) A
+        ORDER BY distance ASC) B
+        LIMIT ${pageIndex},${pageSize}
+    </select>
+    <select id="findSubStadiumListByClassify" parameterType="java.util.Map" resultType="java.util.HashMap">
+        SELECT
+        *
+        FROM (SELECT A.*,
+        ROUND(6378.138*2*asin(sqrt(pow(sin( (lat*pi()/180-${clientLat}*pi()/180)/2),2)+cos(lat*pi()/180)*cos(${clientLat}*pi()/180)* pow(sin( (lng*pi()/180-${clientLng}*pi()/180)/2),2)))*1000) + "" AS distance
+        FROM (
+        SELECT
+        ss.id,
+        ss. NAME sName,
+        ms.address,
+        ms. NAME mName,
+        ms.lng,
+        ms.lat,
+        sp.pic_address
+        FROM
+        sub_stadium ss
+        LEFT JOIN main_stadium ms ON ss.parent_id = ms.id
+        LEFT JOIN stadium_pic sp ON sp.stadium_id = ss.id
+        WHERE 1=1
+          <if test="classify!=null and classify!=''">
+           AND   ss.classify = #{classify}
+          </if>
+        <![CDATA[ AND CAST(lng AS DECIMAL(19, 12)) < ${maxLng}
+		AND CAST(lng AS DECIMAL(19, 12)) > ${minLng}
+		AND CAST(lat AS DECIMAL(19, 12)) < ${maxLat}
+		AND CAST(lat AS DECIMAL(19, 12)) > ${minLat}]]>
+        ) A
+        ORDER BY distance ASC) B
+        LIMIT ${pageIndex},${pageSize}
+    </select>
+
+    <!-- 根据子场馆ID获得子场馆和所属父场馆详情 -->
+    <select id="getStadiumDetail" parameterType="java.lang.String" resultType="java.util.HashMap">
+        SELECT
+            m.`name` AS mname,
+            m.address,
+            m.telephone,
+            m.`status` AS mstatus,
+            s.classify,
+            s.id AS sid,
+            s.parent_id as pid,
+            s.`name` AS sname,
+            s.`status` AS sstatus
+        FROM
+            sub_stadium s
+        LEFT JOIN main_stadium m ON s.parent_id = m.id
+        WHERE
+            s.id = #{stadiumId}
+    </select>
+    <!-- 根据场馆ID获取场馆图片列表 -->
+    <select id="getAllPictureByStadiumId" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+    SELECT
+        pic.id,pic.pic_address,pic.is_first,pic.stadium_id,pic.create_time
+    FROM
+        stadium_pic pic
+    WHERE
+        pic.stadium_id = #{stadiumId}
+    </select>
+    <select id="findMainStadiumById" parameterType="java.lang.String" resultType="java.util.HashMap">
+        SELECT
+          ms.id,
+          ms.name,
+          ms.address,
+          ms.telephone,
+          ms.introduction,
+          ms.status
+        FROM
+          main_stadium ms
+        WHERE
+          ms.id = #{mainStadiumId}
+    </select>
+    <select id="findPicList" parameterType="java.lang.String" resultType="java.util.HashMap">
+        SELECT
+          id,
+          pic_address,
+          is_first,
+          stadium_id,
+          create_time
+        FROM
+          stadium_pic
+        WHERE
+          stadium_pic.stadium_id = #{mainStadiumId}
+    </select>
+    <!--查询所有主场管列表 -->
+    <select id="findAllMerchantList" resultType="java.util.HashMap">
+        SELECT
+            id,
+            merchant_name,
+            address,
+            contacts,
+            telephone,
+            cooperation_way,
+            pay_way,
+            pay_way_account,
+            pay_way_key,
+            settlement_way,
+            status,
+            remark
+        FROM
+            merchant
+    </select>
+    <!-- 查询所有主场馆列表-->
+    <select id="findAllMainStadiumList" resultType="java.util.HashMap">
+         SELECT
+            id,
+            name,
+            address,
+            open_time,
+            telephone,
+            introduction,
+            lng,
+            lat,
+            status,
+            classify,
+            is_special,
+            create_time
+        FROM
+            main_stadium
+    </select>
+    <!--根据主场馆ID查询子场馆列表 -->
+    <select id="findSubStadiumListByMainId" parameterType="java.lang.String" resultType="java.util.HashMap">
+        SELECT
+            ss.id,
+            ss.name,
+            ss.classify,
+            ss.introduction,
+            ss.status,
+            ss.create_time,
+            ms.address,
+            ms.create_time,
+            ms.classify,
+            ms.id,
+            ms.introduction,
+            ms.name
+        FROM
+	        sub_stadium ss
+        LEFT JOIN main_stadium ms ON ms.id = ss.parent_id
+        WHERE
+	        ms.id = #{mainStadiumId}
+    </select>
+</mapper>
