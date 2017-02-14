@@ -15,4 +15,10 @@ public class Config {
     @Value("${sport.default.distance}")
     public  String defaultDistance;
 
+    /**
+     * #体育局后台管理访问接口地址
+     */
+    @Value("${sportmgr.url}")
+    public  String SPORT_MGR_URL;
+
 }

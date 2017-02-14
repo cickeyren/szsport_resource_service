@@ -2,6 +2,7 @@ package com.digitalchina.common.utils;
 
 import com.digitalchina.common.ServiceRuntimeException;
 import com.digitalchina.sport.resource.api.common.Constants;
+import com.google.gson.Gson;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.ClientProtocolException;
@@ -22,7 +23,8 @@ import java.io.UnsupportedEncodingException;
 import java.util.Iterator;
 import java.util.Map;
 
-
+import java.util.List;
+import java.util.ArrayList;
 
 /**
  * Http请求辅助类
@@ -211,10 +213,36 @@ public class HttpClientUtil {
             }
         }
     }
-    
-    //public static void main(String[] args){
-    //	String ut=HttpClientUtil.doGet("http://mscx-dict-api.eastdc.cn:82/catalog/getServiceCatalog.do?areaId=440100&deleteFlag=N", 2000, null, null);
-    //	System.out.println(ut);
-    //}
+
+    /**
+     * 调用接口获取所有商户的信息
+     * @return
+     */
+    public static List<Map<String,Object>> getListResultByURLAndKey(String url,String interfaceName,String resultKey) {
+        List<Map<String,Object>> resultList = null;
+        String result = null;
+        try {
+            result = HttpClientUtil.doGet(url, 2000, null, null);
+            Gson gson = new Gson();
+            Map<String,Object> gsonMap =  gson.fromJson(result,Map.class);
+            if(null != gsonMap && gsonMap.containsKey("code")) {
+                if(Constants.RTN_CODE_SUCCESS.equals((String)gsonMap.get("code"))) {
+                    Map<String,Object> resultMap = (Map<String,Object>)gsonMap.get("result");
+                    resultList = (List<Map<String, Object>>) resultMap.get(resultKey);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("=========调用远程"+interfaceName+"接口时发生错误===========",e);
+        }
+        return resultList != null? resultList:new ArrayList<Map<String,Object>>();
+    }
+
+
+
+//    public static void main(String[] args){
+//       // System.out.println(getListResultByURLAndKey("http://192.168.31.181:8080/yearstrategyticket/api/getYearStrategyTicketModelInfoList.json?pageIndex=0&pageSize=10","获取年票的模型信息","getYearStrategyTicketModelInfoList"));
+//
+//    }
 
 }
