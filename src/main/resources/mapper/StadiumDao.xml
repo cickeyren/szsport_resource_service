@@ -111,10 +111,19 @@
         SELECT
           ms.id,
           ms.name,
+          ms.provincial_level,
+          ms.city_level,
+          ms.district_level,
+          ms.trading_area,
           ms.address,
+          ms.lng,
+          ms.lat,
+          ms.open_time,
+          ms.classify,
           ms.telephone,
           ms.introduction,
-          ms.status
+          ms.status,
+          ms.is_special
         FROM
           main_stadium ms
         WHERE

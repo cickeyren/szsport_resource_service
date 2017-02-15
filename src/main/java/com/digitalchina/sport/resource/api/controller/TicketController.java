@@ -1,6 +1,7 @@
 package com.digitalchina.sport.resource.api.controller;
 
 import com.digitalchina.common.utils.HttpClientUtil;
+import com.digitalchina.common.utils.StringUtil;
 import com.digitalchina.sport.resource.api.common.config.Config;
 import com.digitalchina.sport.resource.api.service.StadiumService;
 
@@ -30,14 +31,20 @@ public class TicketController {
     @RequestMapping(value="getYearStrategyTicketModelInfoList.json",method = RequestMethod.GET)
     @ResponseBody
     public Object getYearStrategyTicketModelInfoList( @RequestParam(value = "pageIndex", required = false)String pageIndex,
-                                                      @RequestParam(value = "pageSize", required = false) String pageSize,@RequestParam(required = false) String mainStadiumId) {
-        if(null == pageIndex) {
-            pageIndex = "";
+                                                      @RequestParam(value = "pageSize", required = false) String pageSize,
+                                                      @RequestParam(required = false) String mainStadiumId,
+                                                      @RequestParam(required = false) String classify) {
+        String url = "yearstrategyticket/api/getYearStrategyTicketModelInfoList.json?mainStadiumId="+mainStadiumId;
+        if(StringUtil.isEmpty(pageIndex)) {
+            url += "&pageIndex"+pageIndex;
         }
-        if(null == pageSize) {
-            pageSize = "";
+        if(StringUtil.isEmpty(pageSize)) {
+            url += "&pageSize"+pageSize;
         }
-    return HttpClientUtil.doGet(config.SPORT_MGR_URL + "yearstrategyticket/api/getYearStrategyTicketModelInfoList.json?pageIndex="+pageIndex+"&pageSize="+pageSize + "&mainStadiumId="+mainStadiumId,50000,null,"");
+        if(StringUtil.isEmpty(classify)) {
+            url += "&classify"+classify;
+        }
+        return HttpClientUtil.doGet(config.SPORT_MGR_URL + url,50000,null,"");
     }
 
 }
