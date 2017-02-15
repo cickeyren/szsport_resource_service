@@ -39,6 +39,16 @@ public class StadiumController {
         paramMap.put("clientLng",clientLng);
         paramMap.put("clientLat",clientLat);
         List<Map<Object,Object>> mapList = stadiumService.getAllSpecialStadium(paramMap);
+        for(int i = 0; i<mapList.size();i++) {
+            Map<Object,Object> param = mapList.get(i);
+            Double distance = (Double) param.get("subdetail");
+            if(null != distance) {
+                param.put("subdetail", String.format("%.2f",distance/1000) + " km");
+            }
+            param.put("action",config.SPORT_RESOURCE_URL + "/html/arenaDetail.html?mainStadiumId=" + param.get("id"));
+            //SPORTR_ESOURCE_URL
+        }
+
         Map<String,Object> resultMap=new HashMap<String, Object>();
         resultMap.put("list",mapList);
         return RtnData.ok(resultMap);

@@ -20,5 +20,10 @@ public class Config {
      */
     @Value("${sportmgr.url}")
     public  String SPORT_MGR_URL;
+    /**
+     * #工程访问域名
+     */
+    @Value("${sportresource.url}")
+    public  String SPORT_RESOURCE_URL;
 
 }

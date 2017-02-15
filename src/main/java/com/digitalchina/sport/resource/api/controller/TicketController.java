@@ -30,14 +30,14 @@ public class TicketController {
     @RequestMapping(value="getYearStrategyTicketModelInfoList.json",method = RequestMethod.GET)
     @ResponseBody
     public Object getYearStrategyTicketModelInfoList( @RequestParam(value = "pageIndex", required = false)String pageIndex,
-                                                      @RequestParam(value = "pageSize", required = false) String pageSize) {
+                                                      @RequestParam(value = "pageSize", required = false) String pageSize,@RequestParam(required = false) String mainStadiumId) {
         if(null == pageIndex) {
             pageIndex = "";
         }
         if(null == pageSize) {
             pageSize = "";
         }
-    return HttpClientUtil.doGet(config.SPORT_MGR_URL + "yearstrategyticket/api/getYearStrategyTicketModelInfoList.json?pageIndex="+pageIndex+"&pageSize="+pageSize,50000,null,"");
+    return HttpClientUtil.doGet(config.SPORT_MGR_URL + "yearstrategyticket/api/getYearStrategyTicketModelInfoList.json?pageIndex="+pageIndex+"&pageSize="+pageSize + "&mainStadiumId="+mainStadiumId,50000,null,"");
     }
 
 }
