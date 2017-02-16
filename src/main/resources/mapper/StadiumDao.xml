@@ -62,13 +62,14 @@
         ms. NAME mName,
         ms.lng,
         ms.lat,
-        sp.pic_address
+        sp.pic_address,
+        ss.classify
         FROM
         sub_stadium ss
         LEFT JOIN main_stadium ms ON ss.parent_id = ms.id
         LEFT JOIN stadium_pic sp ON sp.stadium_id = ss.id
         WHERE 1=1
-          <if test="classify!=null and classify!=''">
+          <if test="classify != null and classify != ''">
            AND   ss.classify = #{classify}
           </if>
         <![CDATA[ AND CAST(lng AS DECIMAL(19, 12)) < ${maxLng}

@@ -35,14 +35,14 @@ public class TicketController {
                                                       @RequestParam(required = false) String mainStadiumId,
                                                       @RequestParam(required = false) String classify) {
         String url = "yearstrategyticket/api/getYearStrategyTicketModelInfoList.json?mainStadiumId="+mainStadiumId;
-        if(StringUtil.isEmpty(pageIndex)) {
-            url += "&pageIndex"+pageIndex;
+        if(!StringUtil.isEmpty(pageIndex)) {
+            url += "&pageIndex="+pageIndex;
         }
-        if(StringUtil.isEmpty(pageSize)) {
-            url += "&pageSize"+pageSize;
+        if(!StringUtil.isEmpty(pageSize)) {
+            url += "&pageSize="+pageSize;
         }
-        if(StringUtil.isEmpty(classify)) {
-            url += "&classify"+classify;
+        if(!StringUtil.isEmpty(classify)) {
+            url += "&classify="+classify;
         }
         return HttpClientUtil.doGet(config.SPORT_MGR_URL + url,50000,null,"");
     }
