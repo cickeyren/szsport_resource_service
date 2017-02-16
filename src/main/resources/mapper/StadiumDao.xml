@@ -151,9 +151,6 @@
             contacts,
             telephone,
             cooperation_way,
-            pay_way,
-            pay_way_account,
-            pay_way_key,
             settlement_way,
             status,
             remark
