@@ -63,7 +63,8 @@
         ms.lng,
         ms.lat,
         sp.pic_address,
-        ss.classify
+        ss.classify,
+        ss.parent_id
         FROM
         sub_stadium ss
         LEFT JOIN main_stadium ms ON ss.parent_id = ms.id

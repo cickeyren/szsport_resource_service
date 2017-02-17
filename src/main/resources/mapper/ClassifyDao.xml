@@ -13,5 +13,22 @@
     <select id="getCategoryByCid" parameterType="int" resultType="Classify">
         SELECT * FROM classify WHERE cid = #{cid}
     </select>
-
+    <!-- 根据主场馆查询所有子场馆类别 -->
+    <select id="getAllClassifyByParentId" parameterType="String" resultType="java.util.HashMap">
+        SELECT
+            cla.*
+        FROM
+            classify cla
+        WHERE
+            cla.cid IN (
+                SELECT
+                    sub.classify
+                FROM
+                    sub_stadium sub
+                LEFT JOIN main_stadium main ON main.id = sub.parent_id
+                WHERE
+                    parent_id = '1002'
+            )
+        ORDER BY CONVERT(cla.sort,SIGNED)
+    </select>
 </mapper>
