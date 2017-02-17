@@ -4,7 +4,7 @@
     <!-- 根据子场馆id查询该场馆使用的所有设备 -->
     <select id="findAllEquipBySubStadiumId" parameterType="java.util.Map" resultType="java.util.HashMap">
         SELECT
-            e.id,e.equipment_type,
+            e.id,e.equipment_name,e.`status`,
             s.`name` AS subName,
             m.`name` AS mainName
         FROM
