@@ -2,9 +2,12 @@ package com.digitalchina.sport.resource.api.controller;
 
 import com.digitalchina.common.RtnData;
 import com.digitalchina.common.utils.DistanceUtils;
+import com.digitalchina.common.utils.StringUtil;
 import com.digitalchina.sport.resource.api.common.config.Config;
 import com.digitalchina.sport.resource.api.service.StadiumService;
 import com.mysql.jdbc.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,7 +22,7 @@ import java.util.Map;
 @RequestMapping("/res/api/stadium/")
 public class StadiumController {
 
-    //public static final Logger logger = LoggerFactory.getLogger(FieldController.class);
+    public static final Logger logger = LoggerFactory.getLogger(StadiumController.class);
 
     @Autowired
     private Config config;
@@ -32,24 +35,36 @@ public class StadiumController {
      */
     @RequestMapping(value="getAllSpecialStadium.json",method = RequestMethod.GET)
     @ResponseBody
-    public Object getAllSpecialStadium( @RequestParam(value = "clientLng", required = true) String clientLng,
-                                        @RequestParam(value = "clientLat", required = true) String clientLat) {
-        String s = config.pageSize;
-        Map paramMap = DistanceUtils.returnLLSquarePoint(Double.parseDouble(clientLng),Double.parseDouble(clientLat),Double.parseDouble(config.defaultDistance));
-        paramMap.put("clientLng",clientLng);
-        paramMap.put("clientLat",clientLat);
-        List<Map<Object,Object>> mapList = stadiumService.getAllSpecialStadium(paramMap);
-        for(int i = 0; i<mapList.size();i++) {
+    public Object getAllSpecialStadium( @RequestParam(value = "clientLng", required = false) String clientLng,
+                                        @RequestParam(value = "clientLat", required = false) String clientLat) {
+        List<Map<Object,Object>> mapList = null;
+        if(StringUtil.isEmpty(clientLat) || StringUtil.isEmpty(clientLat)) {
+            try {
+                mapList = stadiumService.getAllSpecialStadiumWithNoLngLat();
+            } catch (Exception e) {
+                e.printStackTrace();
+                logger.error("获取精选场馆失败",e);
+                return RtnData.ok("获取精选场馆失败");
+            }
+        } else {
+            Map paramMap = DistanceUtils.returnLLSquarePoint(Double.parseDouble(clientLng),Double.parseDouble(clientLat),Double.parseDouble(config.defaultDistance));
+            paramMap.put("clientLng",clientLng);
+            paramMap.put("clientLat",clientLat);
+            mapList = stadiumService.getAllSpecialStadium(paramMap);
+        }
+
+        for(int i = 0; i< mapList.size();i++) {
             Map<Object,Object> param = mapList.get(i);
             Double distance = (Double) param.get("subdetail");
             if(null != distance) {
                 param.put("subdetail", String.format("%.2f",distance/1000) + " km");
+            } else {
+                param.put("subdetail","");
             }
             param.put("action",config.SPORT_RESOURCE_URL + "/html/arenaDetail.html?mainStadiumId=" + param.get("id"));
-            //SPORTR_ESOURCE_URL
         }
 
-        Map<String,Object> resultMap=new HashMap<String, Object>();
+        Map<String,Object> resultMap = new HashMap<String, Object>();
         resultMap.put("list",mapList);
         return RtnData.ok(resultMap);
     }

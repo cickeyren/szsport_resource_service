@@ -2,11 +2,8 @@ package com.digitalchina.sport.resource.api.service;
 
 import com.digitalchina.sport.resource.api.dao.ApiOrderDao;
 import com.digitalchina.sport.resource.api.model.ApiOrder;
-import com.google.common.collect.Maps;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Map;
 
 /**
  * Created by xiaoning.sun on 2016/12/3.
@@ -19,9 +16,10 @@ public class ApiOrderService {
 
     public ApiOrder getOrderInfoByPK (Integer id)
     {
-        Map<String,Object> params = Maps.newHashMap();
-        params.put("id",id);
-        return apiOrderDao.getOrderInfoByPK(params);
+//        Map<String,Object> params = Maps.newHashMap();
+//        params.put("id",id);
+//        return apiOrderDao.getOrderInfoByPK(params);
+        return null;
     }
 
 }

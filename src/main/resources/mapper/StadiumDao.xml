@@ -22,6 +22,23 @@
          AND s.is_first='1') A
          ORDER BY subdetail ASC )B
     </select>
+
+    <!-- 无经纬度情况下获取精选主场馆 -->
+    <select id="getAllSpecialStadiumWithNoLngLat" parameterType="java.util.Map" resultType="java.util.HashMap">
+       SELECT
+        m.id,
+        m.name AS title,
+        m.address AS detail,
+        m.lng,
+        m.lat,
+        s.pic_address,
+        m.status
+        FROM
+        main_stadium m
+        LEFT JOIN stadium_pic s ON m.id=s.stadium_id
+        WHERE m.is_special='1'
+        AND s.is_first='1'
+    </select>
     <!-- 查询所有场馆列表且根据用户当前距离排序 -->
     <select id="findAllStadiumList" parameterType="java.util.Map" resultType="java.util.HashMap">
         SELECT

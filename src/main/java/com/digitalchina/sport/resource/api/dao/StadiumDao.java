@@ -66,4 +66,11 @@ public interface StadiumDao {
      */
     List findSubStadiumListByMainId(String mainStadiumId);
 
+    /**
+     *
+     * @param map
+     * @return
+     */
+    List<Map<Object,Object>> getAllSpecialStadiumWithNoLngLat() throws Exception;
+
 }

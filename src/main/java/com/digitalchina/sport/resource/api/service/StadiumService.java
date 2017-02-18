@@ -25,6 +25,15 @@ public class StadiumService {
     }
 
     /**
+     * 无经纬度情况下获取所有精选场馆
+     * @param map
+     * @return
+     */
+    public List<Map<Object,Object>> getAllSpecialStadiumWithNoLngLat() throws Exception{
+        return stadiumDao.getAllSpecialStadiumWithNoLngLat();
+    }
+
+    /**
      * 获取场馆列表
      * @return
      */
