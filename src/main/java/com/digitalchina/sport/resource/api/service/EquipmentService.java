@@ -56,4 +56,8 @@ public class EquipmentService {
         }
         return reqMap;
     }
+
+    public int getCountByEquipmentId(Map<String,Object> map) throws Exception {
+        return equipmentDao.getCountByEquipmentId(map);
+    }
 }

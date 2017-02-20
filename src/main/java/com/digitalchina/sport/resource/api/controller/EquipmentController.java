@@ -75,4 +75,31 @@ public class EquipmentController {
             return RtnData.fail("查询失败!");
         }
     }
+
+    /**
+     * 根据设备编号查询设备编号是否可用
+     * @param equipmentId
+     * @return
+     */
+    @RequestMapping(value="checkeEquipmentId.json",method = RequestMethod.GET)
+    @ResponseBody
+    public RtnData<Object> checkeEquipmentId(@RequestParam(value = "equipmentId", required = true) String equipmentId) {
+
+        Map<String,Object> param = new HashMap<String, Object>();
+        Map<String,Object> reqMap = new HashMap<String, Object>();
+        param.put("id",equipmentId);
+        try {
+            int count = equipmentService.getCountByEquipmentId(param);
+            if(count > 0){
+                reqMap.put("equipmentId",equipmentId);
+                return RtnData.fail(reqMap,"该设备已存在!");
+            }else {
+                return RtnData.ok(reqMap,"该设备可添加!");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("查询失败，",e);
+            return RtnData.fail("查询失败!");
+        }
+    }
 }

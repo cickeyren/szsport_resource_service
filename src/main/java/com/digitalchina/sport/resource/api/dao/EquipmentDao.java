@@ -28,4 +28,10 @@ public interface EquipmentDao {
      */
     List<Map<String,Object>> findAllEquipIdBySubStadiumId(Map<String,Object> param) throws Exception;
 
+    /**
+     * 根据设备id查询设备是否存在
+     * @param param
+     * @return
+     */
+    int getCountByEquipmentId(Map<String,Object> param) throws Exception;
 }
