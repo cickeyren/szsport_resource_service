@@ -27,7 +27,7 @@
                     sub_stadium sub
                 LEFT JOIN main_stadium main ON main.id = sub.parent_id
                 WHERE
-                    parent_id = '1002'
+                    parent_id = #{parentId}
             )
         ORDER BY CONVERT(cla.sort,SIGNED)
     </select>
