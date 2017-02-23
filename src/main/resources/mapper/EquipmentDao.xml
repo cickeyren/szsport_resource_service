@@ -36,4 +36,19 @@
           equipment e
         WHERE e.equipment_id = #{id}
     </select>
+    <!-- 根据设备id查询设备详情 -->
+    <select id="getDetailsByEquipmentId" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            e.equipment_id AS equipmentId,
+            e.equipment_name AS equipmentName,
+            e.`status`,
+            s.`name` AS subStadium,
+            m.`name` AS mainStadium
+        FROM
+            equipment e
+        LEFT JOIN sub_stadium s ON s.id = e.stadium_id
+        LEFT JOIN main_stadium m ON m.id = e.parent_id
+        WHERE
+            e.equipment_id = #{id}
+    </select>
 </mapper>

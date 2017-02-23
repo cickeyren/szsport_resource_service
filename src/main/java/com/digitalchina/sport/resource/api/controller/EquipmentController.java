@@ -78,12 +78,13 @@ public class EquipmentController {
 
     /**
      * 根据设备编号查询设备编号是否可用
+     * 存在的才能添加，不存在不能添加
      * @param equipmentId
      * @return
      */
-    @RequestMapping(value="checkeEquipmentId.json",method = RequestMethod.GET)
+    @RequestMapping(value="insertEquipmentId.json",method = RequestMethod.GET)
     @ResponseBody
-    public RtnData<Object> checkeEquipmentId(@RequestParam(value = "equipmentId", required = true) String equipmentId) {
+    public RtnData<Object> insertEquipmentId(@RequestParam(value = "equipmentId", required = true) String equipmentId) {
 
         Map<String,Object> param = new HashMap<String, Object>();
         Map<String,Object> reqMap = new HashMap<String, Object>();
@@ -91,10 +92,10 @@ public class EquipmentController {
         try {
             int count = equipmentService.getCountByEquipmentId(param);
             if(count > 0){
-                reqMap.put("equipmentId",equipmentId);
-                return RtnData.fail(reqMap,"该设备已存在!");
+                reqMap.put("equipmentDetails",equipmentService.getDetailsByEquipmentId(param));
+                return RtnData.ok(reqMap);
             }else {
-                return RtnData.ok(reqMap,"该设备可添加!");
+                return RtnData.fail("该设备不存在!");
             }
         } catch (Exception e) {
             e.printStackTrace();

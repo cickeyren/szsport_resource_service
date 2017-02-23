@@ -57,7 +57,20 @@ public class EquipmentService {
         return reqMap;
     }
 
-    public int getCountByEquipmentId(Map<String,Object> map) throws Exception {
-        return equipmentDao.getCountByEquipmentId(map);
+    public int getCountByEquipmentId(Map<String,Object> map){
+        try {
+            return equipmentDao.getCountByEquipmentId(map);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
+    public Map<String,Object> getDetailsByEquipmentId(Map<String,Object> map){
+        try {
+            return equipmentDao.getDetailsByEquipmentId(map);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }
