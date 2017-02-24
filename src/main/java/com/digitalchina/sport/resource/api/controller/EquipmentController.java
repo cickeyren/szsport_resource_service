@@ -1,6 +1,7 @@
 package com.digitalchina.sport.resource.api.controller;
 
 import com.digitalchina.common.RtnData;
+import com.digitalchina.common.utils.StringUtil;
 import com.digitalchina.sport.resource.api.model.Field;
 import com.digitalchina.sport.resource.api.service.EquipmentService;
 import org.slf4j.Logger;
@@ -92,6 +93,13 @@ public class EquipmentController {
         try {
             int count = equipmentService.getCountByEquipmentId(param);
             if(count > 0){
+                Map<String,Object> eqDetails = equipmentService.getDetailsByEquipmentId(param);
+                if (!StringUtil.isEmpty(eqDetails.get("isBind"))) {
+                    String isBind = (String) eqDetails.get("isBind");//表示已绑定
+                    if(isBind.equals("1")){
+                        return RtnData.fail("该设备号已被绑定!");
+                    }
+                }
                 reqMap.put("equipmentDetails",equipmentService.getDetailsByEquipmentId(param));
                 return RtnData.ok(reqMap);
             }else {

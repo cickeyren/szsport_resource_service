@@ -43,7 +43,8 @@
             e.equipment_name AS equipmentName,
             e.`status`,
             s.`name` AS subStadium,
-            m.`name` AS mainStadium
+            m.`name` AS mainStadium,
+            e.is_bind AS isBind
         FROM
             equipment e
         LEFT JOIN sub_stadium s ON s.id = e.stadium_id
