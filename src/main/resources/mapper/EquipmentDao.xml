@@ -29,12 +29,12 @@
     </select>
 
     <!-- 根据设备id查询设备是否存在 -->
-    <select id="getCountByEquipmentId" parameterType="java.util.Map" resultType="int">
+    <select id="getCountByEquipmentId" parameterType="String" resultType="int">
         SELECT
           count(0)
         FROM
           equipment e
-        WHERE e.equipment_id = #{id}
+        WHERE e.equipment_id = #{equipmentId}
     </select>
     <!-- 根据设备id查询设备详情 -->
     <select id="getDetailsByEquipmentId" parameterType="java.util.Map" resultType="java.util.Map">
@@ -44,7 +44,8 @@
             e.`status`,
             s.`name` AS subStadium,
             m.`name` AS mainStadium,
-            e.is_bind AS isBind
+            e.is_bind AS isBind,
+            e.device_number AS deviceNumber
         FROM
             equipment e
         LEFT JOIN sub_stadium s ON s.id = e.stadium_id
@@ -52,4 +53,13 @@
         WHERE
             e.equipment_id = #{id}
     </select>
+
+    <!-- 修改绑定状态和绑定设备的唯一标识 -->
+    <update id="bindEquipment" parameterType="java.util.Map" >
+        UPDATE equipment e
+        SET  e.is_bind = #{isBind},
+        e.device_number = #{deviceNumber}
+        WHERE
+        e.equipment_id = #{id}
+    </update>
 </mapper>

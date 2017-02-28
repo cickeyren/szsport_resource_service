@@ -57,9 +57,9 @@ public class EquipmentService {
         return reqMap;
     }
 
-    public int getCountByEquipmentId(Map<String,Object> map){
+    public int getCountByEquipmentId(String equipmentId){
         try {
-            return equipmentDao.getCountByEquipmentId(map);
+            return equipmentDao.getCountByEquipmentId(equipmentId);
         } catch (Exception e) {
             e.printStackTrace();
             return 0;
@@ -72,5 +72,57 @@ public class EquipmentService {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public boolean bindEquipment(Map<String,Object> map) throws Exception{
+       if(equipmentDao.bindEquipment(map) > 0){
+           return true;
+       }else return false;
+    }
+
+    public Map<String,Object> updateEquipment(Map<String,Object> map) throws Exception{
+        Map<String,Object> reqMap=new HashMap<String, Object>();
+        String oldEquipmentId = (String) map.get("oldEquipmentId");
+        String newEquipmentId = (String) map.get("newEquipmentId");
+        int oldCount = equipmentDao.getCountByEquipmentId(oldEquipmentId);
+        int newCount = equipmentDao.getCountByEquipmentId(newEquipmentId);
+        if(oldCount > 0 && newCount > 0){
+            Map<String,Object> params = new HashMap<String,Object>();
+            params.put("id",newEquipmentId);
+            Map<String,Object> newEquipDetails = equipmentDao.getDetailsByEquipmentId(params);//新的设备号是否被绑定
+            String isBind ="";
+            if(!StringUtil.isEmpty(newEquipDetails.get("isBind"))){
+                isBind = (String) newEquipDetails.get("isBind");
+            }
+            if (isBind.equals("1")){
+                reqMap.put("returnKey","false");
+                reqMap.put("returnMessage","该设备号已被绑定");
+            }else {
+                //旧的设备号解绑
+                Map<String,Object> unBindparams = new HashMap<String,Object>();
+                unBindparams.put("isBind","0");
+                unBindparams.put("deviceNumber","");
+                unBindparams.put("id",map.get("oldEquipmentId"));
+                equipmentDao.bindEquipment(unBindparams);
+                //旧的设备号解绑end
+
+                Map<String,Object> bindparams = new HashMap<String,Object>();
+                bindparams.put("isBind","1");
+                bindparams.put("deviceNumber",map.get("deviceNumber"));
+                bindparams.put("id",map.get("newEquipmentId"));
+                if(equipmentDao.bindEquipment(bindparams) > 0){
+                    reqMap.put("returnKey","true");
+                    reqMap.put("returnMessage","修改绑定设备号成功");
+                }else {
+                    reqMap.put("returnKey","false");
+                    reqMap.put("returnMessage","修改绑定设备号失败");
+                }
+            }
+        }else {
+            reqMap.put("returnKey","false");
+            reqMap.put("returnMessage","设备号不存在");
+        }
+
+        return reqMap;
     }
 }

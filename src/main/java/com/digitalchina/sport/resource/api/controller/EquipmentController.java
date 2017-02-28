@@ -85,23 +85,34 @@ public class EquipmentController {
      */
     @RequestMapping(value="insertEquipmentId.json",method = RequestMethod.GET)
     @ResponseBody
-    public RtnData<Object> insertEquipmentId(@RequestParam(value = "equipmentId", required = true) String equipmentId) {
+    public RtnData<Object> insertEquipmentId(@RequestParam(value = "equipmentId", required = true) String equipmentId,
+                                             @RequestParam(value = "deviceNumber", required = true) String deviceNumber) {
 
         Map<String,Object> param = new HashMap<String, Object>();
         Map<String,Object> reqMap = new HashMap<String, Object>();
         param.put("id",equipmentId);
+        param.put("deviceNumber",deviceNumber);
         try {
-            int count = equipmentService.getCountByEquipmentId(param);
+            int count = equipmentService.getCountByEquipmentId(equipmentId);
             if(count > 0){
                 Map<String,Object> eqDetails = equipmentService.getDetailsByEquipmentId(param);
                 if (!StringUtil.isEmpty(eqDetails.get("isBind"))) {
                     String isBind = (String) eqDetails.get("isBind");//表示已绑定
-                    if(isBind.equals("1")){
-                        return RtnData.fail("该设备号已被绑定!");
-                    }
+                    if(!isBind.equals("1")){
+                        param.put("isBind","1");//绑定
+                        if(equipmentService.bindEquipment(param)){
+                            reqMap.put("equipmentDetails",equipmentService.getDetailsByEquipmentId(param));
+                            return RtnData.ok(reqMap,"绑定成功!");
+                        }else return RtnData.fail(reqMap,"绑定失败!");
+
+                    }else return RtnData.fail("该设备号已被绑定!");
+                }else {
+                    param.put("isBind","1");//绑定
+                    if(equipmentService.bindEquipment(param)){
+                        reqMap.put("equipmentDetails",equipmentService.getDetailsByEquipmentId(param));
+                        return RtnData.ok(reqMap,"绑定成功!");
+                    }else return RtnData.fail(reqMap,"绑定失败!");
                 }
-                reqMap.put("equipmentDetails",equipmentService.getDetailsByEquipmentId(param));
-                return RtnData.ok(reqMap);
             }else {
                 return RtnData.fail("该设备不存在!");
             }
@@ -109,6 +120,41 @@ public class EquipmentController {
             e.printStackTrace();
             logger.error("查询失败，",e);
             return RtnData.fail("查询失败!");
+        }
+    }
+
+
+    /**
+     * 修改设备绑定。新的设备号已绑定的不能修改
+     * @param
+     * @return
+     */
+    @RequestMapping(value="updateEquipmentId.json",method = RequestMethod.GET)
+    @ResponseBody
+    public RtnData<Object> updateEquipmentId(@RequestParam(value = "oldEquipmentId", required = true) String oldEquipmentId,
+                                             @RequestParam(value = "newEquipmentId", required = true) String newEquipmentId,
+                                             @RequestParam(value = "deviceNumber", required = true) String deviceNumber) {
+
+        Map<String,Object> param = new HashMap<String, Object>();
+        Map<String,Object> retMap = new HashMap<String, Object>();
+        param.put("oldEquipmentId",oldEquipmentId);
+        param.put("newEquipmentId",newEquipmentId);
+        param.put("deviceNumber",deviceNumber);
+        try {
+
+            Map<String,Object> checkReturnMap = new HashMap<String, Object>();
+            checkReturnMap = equipmentService.updateEquipment(param);
+            retMap.put("checkReturnMap",checkReturnMap);
+            String returnKey = checkReturnMap.get("returnKey").toString();
+            if(returnKey.equals("true")){
+                return RtnData.ok(retMap,"修改设备绑定成功!");
+            }else {
+                return RtnData.fail(retMap,"修改设备绑定失败!");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("修改设备绑定失败!，",e);
+            return RtnData.fail("修改设备绑定失败!");
         }
     }
 }

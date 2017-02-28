@@ -30,10 +30,10 @@ public interface EquipmentDao {
 
     /**
      * 根据设备id查询设备是否存在
-     * @param param
+     * @param equipmentId
      * @return
      */
-    int getCountByEquipmentId(Map<String,Object> param) throws Exception;
+    int getCountByEquipmentId(String equipmentId) throws Exception;
 
     /**
      * 根据设备id查询设备详情
@@ -42,4 +42,12 @@ public interface EquipmentDao {
      * @throws Exception
      */
     Map<String,Object> getDetailsByEquipmentId(Map<String,Object> param) throws Exception;
+
+    /**
+     * 绑定设备号
+     * @param param
+     * @return
+     * @throws Exception
+     */
+    int bindEquipment(Map<String,Object> param)throws Exception;
 }
