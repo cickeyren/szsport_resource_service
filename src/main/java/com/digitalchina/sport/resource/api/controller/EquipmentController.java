@@ -144,12 +144,14 @@ public class EquipmentController {
 
             Map<String,Object> checkReturnMap = new HashMap<String, Object>();
             checkReturnMap = equipmentService.updateEquipment(param);
-            retMap.put("checkReturnMap",checkReturnMap);
             String returnKey = checkReturnMap.get("returnKey").toString();
             if(returnKey.equals("true")){
-                return RtnData.ok(retMap,"修改设备绑定成功!");
+                Map<String,Object> map = new HashMap<String, Object>();
+                map.put("id",newEquipmentId);
+                retMap.put("equipmentDetails",equipmentService.getDetailsByEquipmentId(map));
+                return RtnData.ok(retMap,"绑定成功!");
             }else {
-                return RtnData.fail(retMap,"修改设备绑定失败!");
+                return RtnData.fail(retMap,checkReturnMap.get("returnMessage").toString());
             }
         } catch (Exception e) {
             e.printStackTrace();
