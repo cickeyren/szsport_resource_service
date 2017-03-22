@@ -27,10 +27,10 @@ public class SiteTicketController {
     /**
      * 根据场馆获取生效的场地票列表信息
      * @param mainStadiumId
-     * @param subStadiumId
+     * @param classify
      * @return
      */
-    @RequestMapping(value = "getValidSiteTicketList.json", method = RequestMethod.POST)
+    @RequestMapping(value = "getValidSiteTicketList.json", method = RequestMethod.GET)
     @ResponseBody
     public RtnData getValidSiteTicketList(@RequestParam(required = true) String mainStadiumId,
                                           @RequestParam(required = false) String classify){
@@ -53,7 +53,7 @@ public class SiteTicketController {
      * @param ticketId
      * @return
      */
-    @RequestMapping(value = "getFieldOrderInfoList.json", method = RequestMethod.POST)
+    @RequestMapping(value = "getFieldOrderInfoList.json", method = RequestMethod.GET)
     @ResponseBody
     public RtnData getFieldOrderInfoList(String ticketId, Date searchTime){
         try {
