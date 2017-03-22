@@ -29,10 +29,12 @@
         b.people_num_limit AS peopleNumLimit,
         b.order_description AS orderDescription,
         b.refund_description AS refundDescription,
-        MIN(IFNULL(s.sell_price, 0)) AS sellPrice
+        MIN(IFNULL(s.sell_price, 0)) AS sellPrice,
+        y.classify
         FROM
         site_ticket_basic_info b
         LEFT JOIN site_ticket_strategy_info s ON b.id = s.ticket_id
+        LEFT JOIN year_strategy_stadium_relations y ON b.id = y.ticket_strategy_id
         WHERE
         b.ticket_state = '1'
         AND SYSDATE() &gt; b.available_start_time AND SYSDATE() &lt; b.available_end_time
@@ -41,6 +43,9 @@
         </if>
         <if test="subStadiumId != null and subStadiumId != ''">
             AND b.sub_stadium_id = #{subStadiumId}
+        </if>
+        <if test="classify != null and classify != ''">
+            AND y.classify = #{classify}
         </if>
         GROUP BY b.id
     </select>

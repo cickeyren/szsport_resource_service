@@ -32,12 +32,12 @@ public class SiteTicketController {
      */
     @RequestMapping(value = "getValidSiteTicketList.json", method = RequestMethod.POST)
     @ResponseBody
-    public RtnData getValidSiteTicketList(@RequestParam(required = false) String mainStadiumId,
-                                          @RequestParam(required = true) String subStadiumId){
+    public RtnData getValidSiteTicketList(@RequestParam(required = true) String mainStadiumId,
+                                          @RequestParam(required = false) String classify){
         try {
             Map<String,Object> paramMap = new HashMap<String,Object>();
             paramMap.put("mainStadiumId", mainStadiumId);
-            paramMap.put("subStadiumId", subStadiumId);
+            paramMap.put("classify", classify);
             Map<String,Object> rtnMap = new HashMap<String,Object>();
             rtnMap.put("siteTicketList",siteTicketService.getValidSiteTicketList(paramMap));
             return RtnData.ok(rtnMap);
