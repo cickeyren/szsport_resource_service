@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.digitalchina.sport.resource.api.dao.SiteTicketDao" >
+    <!-- 根据场馆获取生效的场地票列表信息 -->
+    <select id="getValidSiteTicketList" parameterType="HashMap" resultType="HashMap">
+        SELECT
+        b.id,
+        b.ticket_type AS ticketType,
+        b.main_stadium_id AS mainStadiumId,
+        b.sub_stadium_id AS subStadiumId,
+        b.ticket_name AS ticketName,
+        b.merchant_id AS merchantId,
+        b.stop_order_type AS stopOrderType,
+        b.before_open_time AS beforeOpenTime,
+        b.after_open_time AS afterOpenTime,
+        b.before_close_time AS beforeCloseTime,
+        b.reserve_time AS reserveTime,
+        date_format(b.available_start_time, '%Y-%m-%d') AS availableStartTime,
+        date_format(b.available_end_time, '%Y-%m-%d') AS availableEndTime,
+        b.order_refund_rule AS orderRefundRule,
+        b.no_refund_time AS noRefundTime,
+        b.sell_way AS sellWay,
+        b.minimum_time_limit AS minimumTimeLimit,
+        b.site_num_limit AS siteNumLimit,
+        b.check_ticket_type AS checkTicketType,
+        b.check_ticket_way AS checkTicketWay,
+        b.approach_time AS approachTime,
+        b.departure_time AS departureTime,
+        b.people_num_limit AS peopleNumLimit,
+        b.order_description AS orderDescription,
+        b.refund_description AS refundDescription,
+        MIN(IFNULL(s.sell_price, 0)) AS sellPrice
+        FROM
+        site_ticket_basic_info b
+        LEFT JOIN site_ticket_strategy_info s ON b.id = s.ticket_id
+        WHERE
+        b.ticket_state = '1'
+        AND SYSDATE() &gt; b.available_start_time AND SYSDATE() &lt; b.available_end_time
+        <if test="mainStadiumId != null and mainStadiumId != ''">
+            AND b.main_stadium_id = #{mainStadiumId}
+        </if>
+        <if test="subStadiumId != null and subStadiumId != ''">
+            AND b.sub_stadium_id = #{subStadiumId}
+        </if>
+        GROUP BY b.id
+    </select>
+
+    <!-- 根据场地票获取策略场地列表信息 -->
+    <select id="getFieldListByTicket" parameterType="HashMap" resultType="HashMap">
+        SELECT s.site FROM site_ticket_strategy_info s
+        WHERE s.ticket_id = #{ticketId}
+    </select>
+
+    <!-- 获取场地列表信息 -->
+    <select id="getFieldListByIds" parameterType="HashMap" resultType="HashMap">
+        SELECT
+            f.id,
+            f.field_name AS fieldName,
+            f.display_name AS displayName,
+            f.lock_stauts AS lockStatus,
+            f.introduction,
+            f.stadium_id AS stadiumId
+        FROM
+            field f
+        WHERE
+            <foreach collection="ids" index="index" item="item" open="" separator="or" close="">
+                id = #{item}
+            </foreach>
+        AND f. STATUS = '1'
+    </select>
+
+    <!-- 根据场地票获取场地开放时段 -->
+    <select id="getTimeIntervalByTicket" parameterType="HashMap" resultType="HashMap">
+        SELECT
+            i.id,
+            i.time_code AS timeCode,
+            i.substadium_id AS subStadiumId,
+            i.time_inter AS timeInter,
+            i.time_sort AS timeSort
+        FROM
+            time_interval i
+        LEFT JOIN site_ticket_strategy_info s ON i.time_code = s.time_code
+        <where>
+            <if test="ticketId != null and ticketId != ''">
+                s.ticket_id = #{ticketId}
+            </if>
+        </where>
+        GROUP BY i.time_inter
+        ORDER BY i.time_sort
+    </select>
+
+    <!-- 根据场地票获取价格策略 -->
+    <select id="getStrategyByTicket" parameterType="HashMap" resultType="HashMap">
+        SELECT
+            s.id,
+            s.strategy_name AS strategyName,
+            s.sub_stadium_id AS subStadiumId,
+            s.site,
+            s.date_type AS dateType,
+            s.week_details AS weekDetails,
+            s.specific_date AS specificDate,
+            s.time_code AS timeCode,
+            s.time_interval_id AS timeIntervalId,
+            s.sell_price AS sellPrice,
+            s.cost_price as costPrice,
+            s.store_price AS storePrice
+        FROM
+            site_ticket_strategy_info s
+        WHERE
+            s.ticket_id = #{ticketId}
+        ORDER BY
+            date_type
+    </select>
+
+    <select id="getOrderFieldTime" parameterType="HashMap" resultType="HashMap">
+        SELECT
+            s.field_id AS fieldId,
+            s.order_date AS orderDate,
+            s.time_interval_id AS timeIntervalId,
+            s.status
+        FROM
+            site_time_interval_status s
+        <where>
+            <if test="searchTime != null and searchTime != ''">
+                date_format(s.order_date, '%Y-%m-%d') = #{searchTime}
+            </if>
+        </where>
+    </select>
+</mapper>
