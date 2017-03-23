@@ -100,13 +100,13 @@ public class SiteTicketService {
                     String[] specificDate = strategyList.get(k).get("specificDate").toString().split(",");
                     String sellPrice = strategyList.get(k).get("sellPrice").toString();
                     String[] timeIntervalId = strategyList.get(k).get("timeIntervalId").toString().split(",");
-                    itemMap.put("status", 0);
+                    Boolean isExist = false;
                     //日期类型为周
                     if("1".equals(dateType)){
                         if(Arrays.asList(weekDetails).contains(weekToNum(week))){
                             if(Arrays.asList(sites).contains(fieldList.get(i).get("id"))){
                                 if(Arrays.asList(timeIntervalId).contains(timeIntervalList.get(j).get("id"))){
-                                    itemMap.put("sellPrice", strategyList.get(k).get("sellPrice"));
+                                    isExist = true;
                                 }
                             }
                         }
@@ -119,12 +119,20 @@ public class SiteTicketService {
                             if(searchTime.after(startTime) && searchTime.before(endTime)){
                                 if(Arrays.asList(sites).contains(fieldList.get(i).get("id"))){
                                     if(Arrays.asList(timeIntervalId).contains(timeIntervalList.get(j).get("id"))){
-                                        itemMap.put("sellPrice", strategyList.get(k).get("sellPrice"));
+                                        isExist = true;
                                     }
                                 }
                             }
                         }
                     }
+                    if(isExist){
+                        itemMap.put("status", 0);
+                        itemMap.put("sellPrice", strategyList.get(k).get("sellPrice"));
+                    } else {
+                        itemMap.put("status", -1);
+                        itemMap.put("sellPrice", null);
+                    }
+
                 }
                 priceList.add(itemMap);
             }
