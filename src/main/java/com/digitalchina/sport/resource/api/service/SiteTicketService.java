@@ -1,7 +1,10 @@
 package com.digitalchina.sport.resource.api.service;
 
 import com.digitalchina.common.utils.DateUtil;
+import com.digitalchina.sport.resource.api.controller.SiteTicketController;
 import com.digitalchina.sport.resource.api.dao.SiteTicketDao;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +18,8 @@ import java.util.*;
  */
 @Service
 public class SiteTicketService {
+    private static final Logger logger = LoggerFactory.getLogger(SiteTicketService.class);
+
     @Autowired
     private SiteTicketDao siteTicketDao;
 
@@ -74,7 +79,7 @@ public class SiteTicketService {
         Map<String,Object> paramMap = new HashMap<String,Object>();
         paramMap.put("ticketId", ticketId);
         paramMap.put("searchTime", DateUtil.formatDate(searchTime));
-        SimpleDateFormat df = new SimpleDateFormat("EEEE");
+        SimpleDateFormat df = new SimpleDateFormat("EEEE",Locale.CHINESE);
         String week = df.format(searchTime);
         //根据场地票获取场地列表信息
         List<Map<String, Object>> fieldList = getFieldListByTicket(paramMap);
@@ -104,7 +109,7 @@ public class SiteTicketService {
                     String[] timeIntervalId = strategyList.get(k).get("timeIntervalId").toString().split(",");
                     //日期类型为周
                     if("1".equals(dateType)){
-                        if(Arrays.asList(weekDetails).contains(weekToNum(week))){
+                        if(Arrays.asList(weekDetails).contains(this.weekToNum(week))){
                             if(Arrays.asList(sites).contains(fieldList.get(i).get("id"))){
                                 if(Arrays.asList(timeIntervalId).contains(timeIntervalList.get(j).get("id"))){
                                     price = sellPrice;
