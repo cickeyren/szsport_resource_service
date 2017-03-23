@@ -93,6 +93,8 @@ public class SiteTicketService {
                 itemMap.put("timeInter", timeIntervalList.get(j).get("timeInter"));
                 itemMap.put("timeSort", timeIntervalList.get(j).get("timeSort"));
                 itemMap.put("timeCode", timeIntervalList.get(j).get("timeCode"));
+                int status = -1;
+                String price = new String();
                 for (int k = 0; k < strategyList.size(); k++){
                     String dateType = strategyList.get(k).get("dateType").toString();
                     String[] sites = strategyList.get(k).get("site").toString().split(",");
@@ -100,13 +102,14 @@ public class SiteTicketService {
                     String[] specificDate = strategyList.get(k).get("specificDate").toString().split(",");
                     String sellPrice = strategyList.get(k).get("sellPrice").toString();
                     String[] timeIntervalId = strategyList.get(k).get("timeIntervalId").toString().split(",");
-                    Boolean isExist = false;
                     //日期类型为周
                     if("1".equals(dateType)){
                         if(Arrays.asList(weekDetails).contains(weekToNum(week))){
                             if(Arrays.asList(sites).contains(fieldList.get(i).get("id"))){
                                 if(Arrays.asList(timeIntervalId).contains(timeIntervalList.get(j).get("id"))){
-                                    isExist = true;
+                                    price = sellPrice;
+                                    status = 0;
+                                    continue;
                                 }
                             }
                         }
@@ -119,21 +122,17 @@ public class SiteTicketService {
                             if(searchTime.after(startTime) && searchTime.before(endTime)){
                                 if(Arrays.asList(sites).contains(fieldList.get(i).get("id"))){
                                     if(Arrays.asList(timeIntervalId).contains(timeIntervalList.get(j).get("id"))){
-                                        isExist = true;
+                                        price = sellPrice;
+                                        status = 0;
+                                        continue;
                                     }
                                 }
                             }
                         }
                     }
-                    if(isExist){
-                        itemMap.put("status", 0);
-                        itemMap.put("sellPrice", strategyList.get(k).get("sellPrice"));
-                    } else {
-                        itemMap.put("status", -1);
-                        itemMap.put("sellPrice", null);
-                    }
-
                 }
+                itemMap.put("status", status);
+                itemMap.put("sellPrice", price);
                 priceList.add(itemMap);
             }
         }
