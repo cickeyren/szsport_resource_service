@@ -123,7 +123,7 @@ public class SiteTicketService {
                         for(int l = 0; l < specificDate.length; l++){
                             String[] specifice= specificDate[l].split("\\$");
                             Date startTime = DateUtil.parseDate(specifice[0]);
-                            Date endTime = DateUtil.parseDate(specifice[1]);
+                            Date endTime = this.getSpecificeEndDate(DateUtil.parseDate(specifice[1]));
                             if(searchTime.after(startTime) && searchTime.before(endTime)){
                                 if(Arrays.asList(sites).contains(fieldList.get(i).get("id"))){
                                     if(Arrays.asList(timeIntervalId).contains(timeIntervalList.get(j).get("id"))){
@@ -185,5 +185,13 @@ public class SiteTicketService {
             num = "7";
         }
         return num;
+    }
+
+    //指定日的结束时间不包含小时，指定日包含结束时间，转换成时间默认加一天
+    public Date getSpecificeEndDate(Date date){
+        Calendar cl = Calendar.getInstance();
+        cl.setTime(date);
+        cl.add(Calendar.DATE, 1);
+        return cl.getTime();
     }
 }
