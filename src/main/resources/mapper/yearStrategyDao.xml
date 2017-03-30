@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.digitalchina.sport.resource.api.dao.YearStrategyDao" >
+    <!--根据分页参数查询策略列表-->
+    <select id="getYearStrategyTicketModelInfoList" parameterType="HashMap" resultType="HashMap">
+        SELECT
+        E.*, B.id AS yearStrategyId,
+        B.ticket_name,
+        B.sell_price AS sellPrice,
+        B.store_price AS storePrice,
+        B.refund_description AS refundDescription,
+        B.order_description AS orderDescription,
+        B.order_refund_rule AS orderRefundRule,
+        C.id AS subStadiumId,
+        C.`name` AS subStadiumName,
+        D.id AS mainStadiumId,
+        D.`name` AS mainStadiumName
+        FROM
+        (
+        SELECT
+        A.main_stadium_id,
+        A.sub_stadium_id,
+        A.ticket_strategy_id,
+        A.classify
+        FROM
+        `year_strategy_stadium_relations` A
+        WHERE
+        A.main_stadium_id = #{mainStadiumId}
+        <if test="classify !=null and classify != ''">
+            AND A.classify = #{classify}
+        </if>
+
+        ) E
+        LEFT JOIN `year_strategy_ticket_basic_info` B ON E.ticket_strategy_id = B.id
+        LEFT JOIN `sub_stadium` C ON E.sub_stadium_id = C.id
+        LEFT JOIN `main_stadium` D ON C.parent_id = D.id
+        WHERE B.strategy_state = #{strategyState}
+        ORDER BY B.create_time DESC  LIMIT #{pageIndex},#{pageSize}
+    </select>
+</mapper>

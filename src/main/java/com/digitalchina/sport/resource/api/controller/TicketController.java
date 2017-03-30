@@ -1,12 +1,20 @@
 package com.digitalchina.sport.resource.api.controller;
 
+import com.digitalchina.common.RtnData;
 import com.digitalchina.common.utils.HttpClientUtil;
 import com.digitalchina.common.utils.StringUtil;
 import com.digitalchina.sport.resource.api.common.config.Config;
+import com.digitalchina.sport.resource.api.dao.YearStrategyDao;
 import com.digitalchina.sport.resource.api.service.StadiumService;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -16,12 +24,12 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/res/api/ticket/")
 public class TicketController {
 
-    //public static final Logger logger = LoggerFactory.getLogger(FieldController.class);
+    public static final Logger logger = LoggerFactory.getLogger(TicketController.class);
 
     @Autowired
     private Config config;
     @Autowired
-    private StadiumService stadiumService;
+    private YearStrategyDao yearStrategyDao;
 
 
     /**
@@ -34,7 +42,8 @@ public class TicketController {
                                                       @RequestParam(value = "pageSize", required = false) String pageSize,
                                                       @RequestParam(required = false) String mainStadiumId,
                                                       @RequestParam(required = false) String classify) {
-        String url = "yearstrategyticket/api/getYearStrategyTicketModelInfoList.json?mainStadiumId="+mainStadiumId;
+        //调用管理端接口，集成UPMS后，不支持此种方式
+        /*String url = "yearstrategyticket/api/getYearStrategyTicketModelInfoList.json?mainStadiumId="+mainStadiumId;
         if(!StringUtil.isEmpty(pageIndex)) {
             url += "&pageIndex="+pageIndex;
         }
@@ -44,7 +53,29 @@ public class TicketController {
         if(!StringUtil.isEmpty(classify)) {
             url += "&classify="+classify;
         }
-        return HttpClientUtil.doGet(config.SPORT_MGR_URL + url,50000,null,"");
+        return HttpClientUtil.doGet(config.SPORT_MGR_URL + url,50000,null,"");*/
+        try {
+            Map<String,Object> paramMap = new HashMap<String,Object>();
+            if (StringUtils.isEmpty(pageIndex)) {
+                pageIndex = "0";
+            }
+
+            if(StringUtils.isEmpty(pageSize)) {
+                pageSize = config.pageSize;
+            }
+            paramMap.put("pageIndex",Integer.valueOf(pageIndex) * Integer.valueOf(pageSize));
+            paramMap.put("pageSize",Integer.valueOf(pageSize));
+            paramMap.put("mainStadiumId",mainStadiumId);
+            paramMap.put("classify",classify);
+            paramMap.put("strategyState","1");
+            Map<String,Object> resultMap = new HashMap<String,Object>();
+            resultMap.put("yearStrategyList",yearStrategyDao.getYearStrategyTicketModelInfoList(paramMap));
+            return RtnData.ok(resultMap);
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("========根分页参数获取年票策略列表失败=========",e);
+        }
+        return RtnData.fail("根分页参数获取年票策略列表失败");
     }
 
 }
