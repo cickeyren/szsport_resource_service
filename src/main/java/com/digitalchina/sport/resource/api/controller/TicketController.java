@@ -5,6 +5,7 @@ import com.digitalchina.common.utils.HttpClientUtil;
 import com.digitalchina.common.utils.StringUtil;
 import com.digitalchina.sport.resource.api.common.config.Config;
 import com.digitalchina.sport.resource.api.dao.YearStrategyDao;
+import com.digitalchina.sport.resource.api.model.YearStrategyTicketModel;
 import com.digitalchina.sport.resource.api.service.StadiumService;
 
 import org.slf4j.Logger;
@@ -31,9 +32,40 @@ public class TicketController {
     @Autowired
     private YearStrategyDao yearStrategyDao;
 
+    /**
+     * 根据根据票策略ID获取票策略详情及子场馆列表及相关验票规则
+     * @param yearStrategyId
+     * @return
+     */
+    @RequestMapping(value = "/getYearStrategyTicketModelInfo.json")
+    @ResponseBody
+    public RtnData getYearStrategyTicketModelInfo(@RequestParam(required = true) String yearStrategyId) {
+        try {
+            Map<String,Object> resultMap = new HashMap<String,Object>();
+            Map<String,Object> paramMap = new HashMap<String,Object>();
+            paramMap.put("id",yearStrategyId);
+            paramMap.put("strategyState","1");
+            YearStrategyTicketModel ticketModel = yearStrategyDao.getYearStrategyTicketModelById(paramMap);
+            resultMap.put("yearStrategyDetail",ticketModel);
+            if(null !=ticketModel) {
+                resultMap.put("studStadiumList",yearStrategyDao.getYearStrategyStadiumRelationsModelByYearStrategyId(yearStrategyId));
+                resultMap.put("checkShieldTimeList",yearStrategyDao.getTicketStrategyCommonCheckShieldTimeModelList(yearStrategyId));
+                resultMap.put("checkUseableTimeList",yearStrategyDao.getYearStrategyTicketCheckUseableTimeModelList(yearStrategyId));
+            }
+            return RtnData.ok(resultMap);
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("========根据票策略ID获取票策略详情及子场馆列表失败=========",e);
+        }
+        return RtnData.fail("根据票策略ID获取票策略详情及子场馆列表失败");
+    }
 
     /**
-     * 获取所有精选场馆
+     * 根据体育馆主主场馆ID，及分类获取年卡列表
+     * @param pageIndex
+     * @param pageSize
+     * @param classify
+     * @param mainStadiumId
      * @return
      */
     @RequestMapping(value="getYearStrategyTicketModelInfoList.json",method = RequestMethod.GET)

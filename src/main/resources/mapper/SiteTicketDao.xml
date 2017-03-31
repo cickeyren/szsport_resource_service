@@ -1,6 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.digitalchina.sport.resource.api.dao.SiteTicketDao" >
+    <!-- 获取下单需要的场地票信息 -->
+    <select id="getSiteTicketInfoToOrder" parameterType="HashMap" resultType="HashMap">
+        SELECT
+        t.id,
+        t.sub_stadium_id AS subStadiumId,
+        s.name as subStadiumName,
+        m.name AS mainStdiumName,
+        s.classify AS classify,
+        t.ticket_name AS ticketName,
+        t.ticket_type AS ticketType,
+        t.merchant_id AS merchantId,
+        t.order_refund_rule AS orderRefundRule,
+        t.no_refund_time AS noRefundTime,
+        t.minimum_time_limit AS minimumTimeLimit,
+        t.site_num_limit AS siteNumLimit,
+        t.check_ticket_type AS checkTicketType,
+        t.check_ticket_way AS checkTicketWay,
+        t.approach_time AS approachTime,
+        t.departure_time AS departureTime,
+        t.people_num_limit AS peopleNumLimit
+        FROM
+        site_ticket_basic_info t
+        LEFT JOIN year_strategy_stadium_relations y ON t.id = y.ticket_strategy_id
+        LEFT JOIN main_stadium m ON t.main_stadium_id = m.id
+        LEFT JOIN sub_stadium s ON t.sub_stadium_id = s.id
+        <where>
+            <if test="ticketId != null and ticketId != ''">
+                t.id = #{ticketId}
+            </if>
+        </where>
+    </select>
+
     <!-- 根据场馆获取生效的场地票列表信息 -->
     <select id="getValidSiteTicketList" parameterType="HashMap" resultType="HashMap">
         SELECT

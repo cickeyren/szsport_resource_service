@@ -1,6 +1,77 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.digitalchina.sport.resource.api.dao.YearStrategyDao" >
+    <!--根据年票策略ID查询年票策略-->
+    <select id="getYearStrategyTicketModelById" parameterType="String" resultType="YearStrategyTicketModel">
+        SELECT
+        `id` AS id,
+        `ticket_type` AS ticketType,
+        `ticket_name`AS ticketName,
+        `merchant_id` AS merchantId,
+        `sell_way` AS sellWay,
+        `order_effective_type` AS orderEffectiveType,
+        DATE_FORMAT(`order_effective_start_time`, '%Y-%m-%d %T') AS orderEffectiveStartTime,
+        DATE_FORMAT(`order_effective_end_time`, '%Y-%m-%d %T') AS orderEffectiveEndTime,
+        `order_refund_rule` AS orderRefundRule,
+        `check_ticket_type` AS checkTicketType,
+        `check_ticket_way` AS checkTicketWay,
+        `check_ticket_available_times` AS checkTicketAvailableTimes,
+        `check_daily_limited_times` AS checkDailyLimitedTimes,
+        `check_limited_date_type` AS checkLimitedDateType,
+        `check_limited_week_details` AS checkLimitedWeekDetails,
+        `check_limited_hours` AS checkLimitedHours,
+        `sell_price` AS sellPrice,
+        `cost_price` AS costPrice,
+        `store_price` AS storePrice,
+        `order_description` AS orderDescription,
+        `refund_description` AS refundDescription,
+        `order_fix_day` AS orderFixDay,
+        DATE_FORMAT(`create_time`, '%Y-%m-%d %T') AS createTime
+        FROM `year_strategy_ticket_basic_info`
+        WHERE id = #{id}
+    </select>
+
+    <!--根据年票策略ID查询年票策略-->
+    <select id="getYearStrategyStadiumRelationsModelByYearStrategyId" parameterType="String" resultType="HashMap">
+        SELECT
+        A.`id`,
+        `ticket_strategy_id` AS ticketStrategyId,
+        `sub_stadium_id` as subStadiumId,
+        B.`name` AS subStdiumName,
+        C.id AS mainStadiumId,
+        C.`name` AS mainStdiumName
+        FROM `year_strategy_stadium_relations` A  LEFT JOIN sub_stadium B ON A.sub_stadium_id = B.id LEFT JOIN main_stadium C ON B.parent_id = C.id
+        WHERE ticket_strategy_id = #{id}
+    </select>
+
+    <!--根据策略ID获取屏蔽时间列表-->
+    <select id="getTicketStrategyCommonCheckShieldTimeModelList" parameterType="String" resultType="TicketStrategyCommonCheckShieldTimeModel">
+        SELECT
+        `id`,
+        `ticket_type` AS ticketType,
+        `ticket_strategy_id` AS ticketStrategyId,
+        `shield_start_time` AS shieldStartTime,
+        `shield_end_time` AS shieldEndTime,
+        `create_time` AS createTime
+        FROM `ticket_strategy_common_check_shield_time`
+        WHERE ticket_strategy_id = #{yearStrategyId}
+        ORDER BY shield_start_time ASC;
+    </select>
+
+    <!--根据策略ID获取可用时间列表-->
+    <select id="getYearStrategyTicketCheckUseableTimeModelList" parameterType="String" resultType="YearStrategyTicketCheckUseableTimeModel">
+        SELECT
+        `id`,
+        `ticket_strategy_id` AS ticketStrategyId,
+        `check_limited_date_type` AS checkLimitedDateType,
+        `useable_start_time` AS useableStartTime,
+        `useable_end_time` AS useableEndTime,
+        `create_time` AS createTime
+        FROM `year_strategy_ticket_check_useable_time`
+        WHERE ticket_strategy_id = #{yearStrategyId}
+        order BY useable_start_time ASC;
+    </select>
+
     <!--根据分页参数查询策略列表-->
     <select id="getYearStrategyTicketModelInfoList" parameterType="HashMap" resultType="HashMap">
         SELECT

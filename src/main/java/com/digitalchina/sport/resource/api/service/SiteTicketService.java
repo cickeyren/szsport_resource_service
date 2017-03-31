@@ -24,6 +24,15 @@ public class SiteTicketService {
     private SiteTicketDao siteTicketDao;
 
     /**
+     * 获取下单需要的场地票信息
+     * @param map
+     * @return
+     */
+    public Map<String, Object> getSiteTicketInfoToOrder(Map<String, Object> map){
+        return siteTicketDao.getSiteTicketInfoToOrder(map);
+    }
+
+    /**
      * 根据场馆获取生效的场地票列表信息
      * @param map
      * @return

@@ -13,6 +13,13 @@ import java.util.Map;
 @Mapper
 public interface SiteTicketDao {
     /**
+     * 获取下单需要的场地票信息
+     * @param map
+     * @return
+     */
+    public Map<String, Object> getSiteTicketInfoToOrder(Map<String, Object> map);
+
+    /**
      * 根据场馆获取生效的场地票列表信息
      * @param map
      * @return

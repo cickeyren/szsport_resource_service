@@ -25,6 +25,25 @@ public class SiteTicketController {
     private SiteTicketService siteTicketService;
 
     /**
+     * 获取下单需要的场地票信息
+     * @param ticketId
+     * @return
+     */
+    @RequestMapping(value = "/getSiteTicketInfoToOrder.json")
+    @ResponseBody
+    public RtnData getSiteTicketInfoToOrder(@RequestParam(required = true) String ticketId){
+        try {
+            Map<String,Object> paramMap = new HashMap<String,Object>();
+            paramMap.put("ticketId", ticketId);
+            return RtnData.ok(siteTicketService.getSiteTicketInfoToOrder(paramMap));
+        }catch (Exception e){
+            e.printStackTrace();
+            logger.error("========根据场地票ID获取场地票详情失败=========",e);
+        }
+        return RtnData.fail("根据场地票ID获取场地票详情失败");
+    }
+
+    /**
      * 根据场馆获取生效的场地票列表信息
      * @param mainStadiumId
      * @param classify
