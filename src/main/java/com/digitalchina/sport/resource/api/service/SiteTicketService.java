@@ -97,7 +97,7 @@ public class SiteTicketService {
         //根据场地票获取价格策略
         List<Map<String, Object>> strategyList = siteTicketDao.getStrategyByTicket(paramMap);
         List<Map<String, Object>> priceList = new ArrayList<Map<String, Object>>();
-        //获取各个场地各个时段内的价格
+        //根据场地票价格策略获取各个场地各个时段内的价格信息
         for (int i = 0; i < fieldList.size(); i++){
             for (int j = 0; j < timeIntervalList.size(); j++){
                 Map<String, Object> itemMap = new HashMap<String, Object>();
@@ -149,6 +149,46 @@ public class SiteTicketService {
                 itemMap.put("sellPrice", price);
                 priceList.add(itemMap);
             }
+        }
+        //获取场地状态中已生效的策略
+        List<Map<String, Object>> fieldStateList = siteTicketDao.getValidFieldStateList(paramMap);
+        List<Map<String, Object>> fieldItemList = new ArrayList<Map<String, Object>>();
+        //根据场地状态策略获取各个场地各个时段内的状态信息
+        for(int i = 0; i < priceList.size(); i++){
+            Map<String, Object> itemMap = priceList.get(i);
+            String status = itemMap.get("status").toString();
+            String content = itemMap.get("sellPrice").toString();
+            for (int j = 0; j < fieldStateList.size(); j++){
+                String[] weekDetails = fieldStateList.get(j).get("weekDetails").toString().split(",");
+                if(fieldStateList.get(j).get("field").toString().contains(itemMap.get("fieldId").toString())){
+                    if(fieldStateList.get(j).get("timeIntervalId").equals(itemMap.get("timeIntervalId"))){
+                        //日期类型为周
+                        if("1".equals(fieldStateList.get(j).get("dateType").toString())) {
+                            if (Arrays.asList(weekDetails).contains(this.weekToNum(week))) {
+                                content = fieldStateList.get(j).get("modifyReason").toString();
+                                status = fieldStateList.get(j).get("status").toString();
+                                continue;
+                            }
+                        } else if("3".equals(fieldStateList.get(j).get("dateType").toString())){
+                            //日期类型为指定日，判断时间是否在指定日以内
+                            String[] specificDate = fieldStateList.get(j).get("specificDate").toString().split(",");
+                            for(int l = 0; l < specificDate.length; l++){
+                                String[] specifice= specificDate[l].split("\\$");
+                                Date startTime = DateUtil.parseDate(specifice[0]);
+                                Date endTime = this.getSpecificeEndDate(DateUtil.parseDate(specifice[1]));
+                                if(searchTime.after(startTime) && searchTime.before(endTime)){
+                                    content = fieldStateList.get(j).get("modifyReason").toString();
+                                    status = fieldStateList.get(j).get("status").toString();
+                                    continue;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            itemMap.put("status", status);
+            itemMap.put("sellPrice", content);
+            fieldItemList.add(itemMap);
         }
         //获取各个场地各个时段内的状态
         List<Map<String, Object>> stateList = siteTicketDao.getOrderFieldTime(paramMap);

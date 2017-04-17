@@ -55,6 +55,13 @@ public interface SiteTicketDao {
     public List<Map<String, Object>> getStrategyByTicket(Map<String, Object> map);
 
     /**
+     * 获取有效的场地状态策略，用于场地票屏蔽、可订购状态修改
+     * @param map
+     * @return
+     */
+    public List<Map<String, Object>> getValidFieldStateList(Map<String, Object> map);
+
+    /**
      * 根据日期获取所有的场地订购信息
      * @param map
      * @return

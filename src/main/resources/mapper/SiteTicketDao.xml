@@ -149,6 +149,44 @@
             date_type
     </select>
 
+    <!-- 获取有效的场地状态策略，用于场地票屏蔽、可订购状态修改 -->
+    <select id="getValidFieldStateList" parameterType="HashMap" resultType="HashMap">
+        select
+        f.id,
+        f.main_stadium_id AS mainStadium,
+        f.sub_stadium_id AS subStadium,
+        f.date_type AS dateType,
+        f.week_details AS weekDetails,
+        f.month_details AS monthDetails,
+        f.specific_date AS specificDate,
+        f.field AS field,
+        f.time_code AS timeCode,
+        f.time_interval_id AS timeIntervalId,
+        f.status AS status,
+        f.available_time AS availableTime,
+        f.modify_reason AS modifyReason,
+        f.create_time AS createTime
+        FROM
+        field_state_modify_info f
+        LEFT JOIN site_ticket_basic_info b ON f.sub_stadium_id = b.sub_stadium_id
+        <where>
+            <if test="ticketId != null and ticketId != ''">
+                AND b.id = #{ticketId}
+            </if>
+            <if test="mainStadiumId != null and mainStadiumId != ''">
+                AND f.main_stadium_id = #{mainStadiumId}
+            </if>
+            <if test="subStadiumId != null and subStadiumId != ''">
+                AND f.sub_stadium_id = #{subStadiumId}
+            </if>
+            <if test="searchTime != null">
+                AND #{searchTime} &gt; f.available_time
+            </if>
+        </where>
+        ORDER BY f.date_type,f.create_time ASC
+    </select>
+
+    <!-- 根据日期获取所有的场地订购信息 -->
     <select id="getOrderFieldTime" parameterType="HashMap" resultType="HashMap">
         SELECT
             s.field_id AS fieldId,
