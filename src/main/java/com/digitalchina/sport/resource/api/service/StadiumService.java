@@ -1,7 +1,9 @@
 package com.digitalchina.sport.resource.api.service;
 
+import com.digitalchina.sport.resource.api.common.Constants;
 import com.digitalchina.sport.resource.api.dao.StadiumDao;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,6 +22,7 @@ public class StadiumService {
      * 获取精选主场馆
      * @return
      */
+    @Cacheable(value = Constants.DEMO_CACHE_NAME,key = Constants.THING_ALL_KEY)
     public List<Map<Object,Object>> getAllSpecialStadium(Map map){
         return stadiumDao.getAllSpecialStadium(map);
     }
@@ -29,6 +32,7 @@ public class StadiumService {
      * @param map
      * @return
      */
+    @Cacheable(value = Constants.DEMO_CACHE_NAME,key = "#thing.getId()+'thing'")
     public List<Map<Object,Object>> getAllSpecialStadiumWithNoLngLat() throws Exception{
         return stadiumDao.getAllSpecialStadiumWithNoLngLat();
     }
@@ -37,6 +41,7 @@ public class StadiumService {
      * 获取场馆列表
      * @return
      */
+    @Cacheable(value = Constants.DEMO_CACHE_NAME,key = "#thing.getId()+'thing'")
     public List getAllStadiumList(Map map){
         return stadiumDao.findAllStadiumList(map);
     }
@@ -63,6 +68,7 @@ public class StadiumService {
      * 根据分类获取子场馆列表
      * @return
      */
+    @Cacheable(value = Constants.DEMO_CACHE_NAME,key = "#thing.getId()+'thing'")
     public List getSubStadiumListByClassify(Map map){
         return stadiumDao.findSubStadiumListByClassify(map);
     }

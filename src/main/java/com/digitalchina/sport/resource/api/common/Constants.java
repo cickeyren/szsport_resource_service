@@ -19,5 +19,12 @@ public class Constants {
      * 通用错误信息
      */
     public final static String RTN_MESSAGE_ERROR = "请求发生异常";
-    
+    /**
+     * 缓存的key
+     */
+    public static final String THING_ALL_KEY   = "\"thing_all\"";
+    /**
+     * value属性表示使用哪个缓存策略，缓存策略在ehcache.xml
+     */
+    public static final String DEMO_CACHE_NAME = "demo";
 }
