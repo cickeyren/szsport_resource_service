@@ -32,7 +32,7 @@ public class StadiumService {
      * @param map
      * @return
      */
-    @Cacheable(value = Constants.DEMO_CACHE_NAME,key = "#thing.getId()+'thing'")
+    @Cacheable(value = Constants.DEMO_CACHE_NAME,key = Constants.THING_ALL_KEY)
     public List<Map<Object,Object>> getAllSpecialStadiumWithNoLngLat() throws Exception{
         return stadiumDao.getAllSpecialStadiumWithNoLngLat();
     }
@@ -41,7 +41,7 @@ public class StadiumService {
      * 获取场馆列表
      * @return
      */
-    @Cacheable(value = Constants.DEMO_CACHE_NAME,key = "#thing.getId()+'thing'")
+    @Cacheable(value = Constants.DEMO_CACHE_NAME,key = Constants.THING_ALL_KEY)
     public List getAllStadiumList(Map map){
         return stadiumDao.findAllStadiumList(map);
     }
@@ -68,7 +68,7 @@ public class StadiumService {
      * 根据分类获取子场馆列表
      * @return
      */
-    @Cacheable(value = Constants.DEMO_CACHE_NAME,key = "#thing.getId()+'thing'")
+    @Cacheable(value = Constants.DEMO_CACHE_NAME,key = Constants.THING_ALL_KEY)
     public List getSubStadiumListByClassify(Map map){
         return stadiumDao.findSubStadiumListByClassify(map);
     }
@@ -99,6 +99,7 @@ public class StadiumService {
      * 获取所有主场馆列表(无参)
      * @return
      */
+    @Cacheable(value = Constants.DEMO_CACHE_NAME,key = Constants.THING_ALL_KEY)
     public List getAllMainStadiumList(){
         return stadiumDao.findAllMainStadiumList();
     }
