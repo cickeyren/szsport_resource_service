@@ -161,7 +161,7 @@ public class SiteTicketService {
             for (int j = 0; j < fieldStateList.size(); j++){
                 String[] weekDetails = fieldStateList.get(j).get("weekDetails").toString().split(",");
                 if(fieldStateList.get(j).get("field").toString().contains(itemMap.get("fieldId").toString())){
-                    if(fieldStateList.get(j).get("timeIntervalId").equals(itemMap.get("timeIntervalId"))){
+                    if(fieldStateList.get(j).get("timeIntervalId").toString().contains(itemMap.get("timeIntervalId").toString())){
                         //日期类型为周
                         if("1".equals(fieldStateList.get(j).get("dateType").toString())) {
                             if (Arrays.asList(weekDetails).contains(this.weekToNum(week))) {
