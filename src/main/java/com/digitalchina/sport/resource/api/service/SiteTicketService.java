@@ -157,7 +157,8 @@ public class SiteTicketService {
         for(int i = 0; i < priceList.size(); i++){
             Map<String, Object> itemMap = priceList.get(i);
             String status = itemMap.get("status").toString();
-            String content = itemMap.get("sellPrice").toString();
+            String price = itemMap.get("sellPrice").toString();
+            String content = price;
             for (int j = 0; j < fieldStateList.size(); j++){
                 String[] weekDetails = fieldStateList.get(j).get("weekDetails").toString().split(",");
                 if(fieldStateList.get(j).get("field").toString().contains(itemMap.get("fieldId").toString())){
@@ -165,8 +166,12 @@ public class SiteTicketService {
                         //日期类型为周
                         if("1".equals(fieldStateList.get(j).get("dateType").toString())) {
                             if (Arrays.asList(weekDetails).contains(this.weekToNum(week))) {
-                                content = fieldStateList.get(j).get("modifyReason").toString();
                                 status = fieldStateList.get(j).get("status").toString();
+                                if(!"0".equals(status)){
+                                    content = fieldStateList.get(j).get("modifyReason").toString();
+                                } else {
+                                    content = price;
+                                }
                                 continue;
                             }
                         } else if("3".equals(fieldStateList.get(j).get("dateType").toString())){
@@ -177,8 +182,12 @@ public class SiteTicketService {
                                 Date startTime = DateUtil.parseDate(specifice[0]);
                                 Date endTime = this.getSpecificeEndDate(DateUtil.parseDate(specifice[1]));
                                 if(searchTime.after(startTime) && searchTime.before(endTime)){
-                                    content = fieldStateList.get(j).get("modifyReason").toString();
                                     status = fieldStateList.get(j).get("status").toString();
+                                    if(!"0".equals(status)) {
+                                        content = fieldStateList.get(j).get("modifyReason").toString();
+                                    } else {
+                                        content = price;
+                                    }
                                     continue;
                                 }
                             }
