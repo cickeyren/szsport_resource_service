@@ -55,8 +55,8 @@ public class StadiumController {
 
         for(int i = 0; i< mapList.size();i++) {
             Map<Object,Object> param = mapList.get(i);
-            Double distance = Double.parseDouble((String) param.get("subdetail"));
-            if(null != distance) {
+            if(!StringUtil.isEmpty(param.get("subdetail"))) {
+                Double distance = Double.parseDouble((String) param.get("subdetail"));
                 param.put("subdetail", String.format("%.2f",distance/1000) + " km");
             } else {
                 param.put("subdetail","");
