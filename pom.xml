@@ -159,31 +159,31 @@
             </snapshots>
         </pluginRepository>
     </pluginRepositories>
-<!--    <profiles>
-        <profile>
-            <id>local</id>
-            <properties>
-                <jdbc.url>jdbc:mysql://10.1.101.82:3306/szsport_order_mgr?useSSL=false</jdbc.url>
-                <jdbc.username>root</jdbc.username>
-                <jdbc.password>1q2w3e4r</jdbc.password>
-            </properties>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-        </profile>
-        <profile>
-            <id>dev82</id>
-            <properties>
-                <jdbc.url>jdbc:mysql://10.1.101.82:3306/szsport_order_mgr?useSSL=false</jdbc.url>
-                <jdbc.username>root</jdbc.username>
-                <jdbc.password>1q2w3e4r</jdbc.password>
-            </properties>
-        </profile>
-    </profiles>-->
     <profiles>
         <profile>
             <id>local</id>
             <properties>
+                <jdbc.url>jdbc:mysql://10.1.101.82:3306/szsport_order_mgr?useSSL=false</jdbc.url>
+                <jdbc.username>root</jdbc.username>
+                <jdbc.password>1q2w3e4r</jdbc.password>
+            </properties>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+        </profile>
+        <profile>
+            <id>dev82</id>
+            <properties>
+                <jdbc.url>jdbc:mysql://10.1.101.82:3306/szsport_order_mgr?useSSL=false</jdbc.url>
+                <jdbc.username>root</jdbc.username>
+                <jdbc.password>1q2w3e4r</jdbc.password>
+            </properties>
+        </profile>
+    </profiles>
+<!--    <profiles>
+        <profile>
+            <id>local</id>
+            <properties>
                 <jdbc.url>jdbc:mysql://221.178.232.93:3307/szsport_order_mgr?useSSL=false</jdbc.url>
                 <jdbc.username>szsport_order</jdbc.username>
                 <jdbc.password>12345678</jdbc.password>
@@ -200,7 +200,7 @@
                 <jdbc.password>12345678</jdbc.password>
             </properties>
         </profile>
-    </profiles>
+    </profiles>-->
     <build>
         <resources>
             <resource>
